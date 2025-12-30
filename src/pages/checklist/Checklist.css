@@ -1,0 +1,171 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+* {
+    font-family: var(--font-body, "Inter", sans-serif);
+    padding: 0;
+    margin: 0;
+}
+
+.checklist-container {
+    background-color: #1f2937; /* Same as sidebar background */
+    color: white;
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: var(--font-body, "Inter", sans-serif);
+}
+
+.card {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+.card-header {
+    background-color: #374151;
+    border-bottom: 1px solid #4b5563;
+    padding: 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.checkbox-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+label {
+    font-size: 0.8rem;
+    color: #343434;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}A
+
+.hoverable-task {
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+.hoverable-task:hover {
+    background-color: #f5f5f5;
+}
+
+.delete-button {
+    position: absolute;
+    right: 0.5rem;
+    opacity: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+.hoverable-task:hover .delete-button {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.list-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 0.5rem 1rem 0 1rem;
+    align-items: stretch;
+    margin-bottom: 5%;
+}
+
+.action-tab {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 0.5rem;
+}
+
+.Sidebarbutton {
+    top: 20px;
+    margin-right: 0.5rem;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    box-shadow: 0 0 4px #ccc, 0 0 7px #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    color: #333;
+    font-size: 22px;
+    padding: 0;
+    outline: none;
+    /* Animación de rotación */
+    transform: rotate(90deg);
+}
+
+.Sidebarbutton.open {
+    transform: rotate(270deg);
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeIn 0.4s ease forwards;
+
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.checked-list-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  opacity: 0;
+}
+
+.checked-list-wrapper.open {
+  max-height: 500px;
+  overflow: hidden;
+  opacity: 1;
+}
+
+
+.chip {
+    padding: 0.3rem 1rem;
+    background-color: #eef7fe;
+    border-radius: 0.2rem;
+    margin: 0.2rem;
+}
+
+.chip-label {
+    font-size: 0.7rem;
+    color: #19344a;
+}
+
+input[type="checkbox"] {
+    color: #fff;
+    cursor: pointer;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #999
+}

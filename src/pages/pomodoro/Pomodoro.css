@@ -1,0 +1,185 @@
+/* Pomodoro Page Styles - Consistent with Sidebar Theme */
+
+* {
+    font-family: var(--font-body, "Inter", sans-serif);
+    padding: 0;
+    margin: 0;
+}
+
+.pomodoro-container {
+    background-color: #1f2937; /* Same as sidebar background */
+    color: white;
+    min-height: 100vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.pomodoro-header {
+    background-color: #374151; /* Hover color from sidebar */
+    border-bottom: 1px solid #4b5563;
+    padding: 1.5rem 2rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 30rem;
+    text-align: center;
+}
+
+.pomodoro-body {
+    background-color: #374151;
+    border-radius: 0.5rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 30rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.wrapper {
+    text-align: center;
+    background-color: #1f2937;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 25rem;
+    height: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* PROGRESS BAR */
+.progress {
+    margin-top: 2rem;
+    margin: 0 auto 24px auto;
+    width: 12.5rem;
+}
+
+.current-round-info {
+    margin-top: 2rem;
+}
+
+/* CONTROLES */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.controls svg {
+    width: 32px;
+    width: 32px;
+    fill: black;
+    stroke: black;
+}
+
+/* BOTONES CIRCULARES */
+.circle-button {
+    background-color: transparent;
+    color: var(--text);
+    border: 0;
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.circle-button:hover {
+    background-color: var(--bg3);
+}
+
+.back-button {
+    font-size: 20px;
+    border: 5px;
+    rotate: 180deg;
+    transform: scaleY(-1);
+}
+
+/* AJUSTES */
+.pomodoro-settings-body {
+    padding: 1.5rem 1.5rem;
+    height: 100%;
+    width: 100%;
+    align-content: center;
+}
+
+.box-sliders {
+    width: auto;
+    height: 12.5rem;
+    align-content: center;
+}
+
+.settings-content {
+    text-align: left;
+}
+
+.settings-content label {
+    display: block;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    text-transform: capitalize;
+}
+
+/* DIV VOLVER */
+.back-div {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* SLIDER*/
+.slider {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 20px 0;
+    position: relative;
+}
+
+.track {
+    height: 8px;
+    border-radius: 4px;
+}
+
+/* Color del track "activo" (parte izquierda) */
+.track.track-0 {
+    background-color: #0077cc;
+}
+
+/* Color del track inactivo (parte derecha) */
+.track.track-1 {
+    background-color: #ccc;
+}
+
+/* Color del thumb */
+.thumb {
+    width: 24px;
+    height: 24px;
+    background-color: #0077cc;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: grab;
+}
+
+.settings-controls {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    height: 4rem;
+    align-items: center;
+}

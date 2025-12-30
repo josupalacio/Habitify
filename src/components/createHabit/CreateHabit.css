@@ -1,0 +1,92 @@
+/* Fondo del overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  /* Efecto de desvanecimiento */
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
+}
+
+/* Modal */
+.modal {
+  background-color: #1f2937;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 22rem;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Organiza el contenido verticalmente */
+  gap: 1rem; /* Espacio entre elementos */
+
+  transform: translateY(-20px);
+  animation: slideIn 0.3s forwards;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+@keyframes slideIn {
+  to { transform: translateY(0); }
+}
+
+/* Botón de cerrar */
+.modal button.btn-close {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 2rem;
+  background: #ff5e5e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Formulario */
+.modal form {
+  display: flex;
+  flex-direction: column; /* Vertical */
+  gap: 1rem; /* Espacio entre inputs */
+  margin-top: 1rem;
+}
+
+/* Inputs */
+.modal input, .modal select, .modal textarea {
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+/* Botón de crear */
+.modal button.btn-create {
+  background-color: #10b981; /* verde brillante */
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.modal button.btn-create:hover {
+  background-color: #059669;
+}
