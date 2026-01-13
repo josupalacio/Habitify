@@ -12,7 +12,16 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# Environment variables (NEVER commit these!)
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+backend/.env
+backend/.env.local
+
+# IDE and Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -21,4 +30,32 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
+*.swp
+*.swo
+*~
+.sublime-workspace
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Database (if using)
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs from backend
+backend/server.log
+server.log
+
+# Node modules in backend
+backend/node_modules
+
+# Testing
+coverage/
+.nyc_output/
+
+# Build outputs
+build/
+out/
 *.sw?
