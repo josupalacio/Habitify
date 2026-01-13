@@ -59,3 +59,4 @@ coverage/
 build/
 out/
 *.sw?
+.env.production
