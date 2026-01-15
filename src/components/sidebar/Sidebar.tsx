@@ -23,6 +23,13 @@ import {
 import {
   TiMessages,
 } from "react-icons/ti"
+import { MdPushPin } from "react-icons/md";
+import { IoHomeOutline, IoCalendarNumberOutline } from "react-icons/io5";
+import { BiLogOut } from "react-icons/bi";
+import { useSidebar } from "../../contexts/SidebarContext";
+import { useAuth } from "../../context/AuthContext";
+import { ManageAccount } from "../../config/firebaseConnect";
+import Swal from 'sweetalert2';
 
 // Types
 type SidebarItem = {
@@ -37,14 +44,42 @@ import CreateHabit from "../createHabit/CreateHabit";
 export const SideBar: React.FC = () => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const navigate = useNavigate();
-
-  // Sidebar elements
-
+  const { isExpanded, setIsExpanded, isPinned, setIsPinned } = useSidebar();
+  const { user, userData } = useAuth();
 
   // Store habits
   const [sidebarItems, setSidebarItems] = useState<
     Record<string, SidebarItem>
   >({});
+
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: '¿Cerrar Sesión?',
+      text: 'Se cerrará tu sesión en Habitify',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3b82f6',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+      const account = new ManageAccount();
+      const logoutResult = await account.signOut();
+      
+      if (logoutResult.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Sesión Cerrada',
+          text: 'Hasta luego!',
+          timer: 1500
+        }).then(() => {
+          navigate('/');
+        });
+      }
+    }
+  };
 
   // Function to add a new habit to sidebar
   const addHabitToSidebar = (name: string) => {
@@ -65,11 +100,27 @@ export const SideBar: React.FC = () => {
 
   return (
     <>
-      <aside>
+      <aside
+        className={isExpanded ? "sidebar expanded" : "sidebar collapsed"}
+        onMouseEnter={() => setIsExpanded(true)}  
+        onMouseLeave={() => !isPinned && setIsExpanded(false)}  
+      >
         <ul>
           <div className="brand-title">
             <img src={logoWhite} />
             <p className="title">Habitify</p>
+            
+            <span className="pin-container">
+              <button 
+                className="pin"
+                onClick={() => {
+                  setIsPinned(!isPinned);
+                  if (!isPinned) setIsExpanded(true);
+                }}
+              >
+                <MdPushPin/>
+              </button>
+            </span>
           </div>
 
 
@@ -81,6 +132,19 @@ export const SideBar: React.FC = () => {
             </span>
           </li>
 
+          <button onClick={() => navigate('/dashboard')}>
+            <li>
+              <span className="icons"><AiOutlineHome /></span>
+              <span className="labels">Dashboard</span>
+            </li>
+          </button>
+
+          <button onClick={() => navigate('/appointments')}>
+            <li>
+              <span className="icons"><IoCalendarNumberOutline /></span>
+              <span className="labels">Appointments</span>
+            </li>
+          </button>
 
           <button onClick={() => navigate('/pomodoro')}>
             <li>
@@ -121,11 +185,10 @@ export const SideBar: React.FC = () => {
             </button>
           ))}
         </ul>
-        <hr />
-        <button>
+        <button onClick={handleLogout} title="Cerrar Sesión">
           <li>
-            <span className="icons"><FaRegUserCircle /></span>
-            <span className="labels">username</span>
+            <span className="icons"><BiLogOut /></span>
+            <span className="labels">Logout</span>
           </li>
         </button>
         <br />

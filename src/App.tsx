@@ -1,0 +1,64 @@
+import { useState } from "react";
+import "./App.css";
+import { SideBar } from "./components/sidebar/Sidebar"
+import Pomodoro from "./pages/pomodoro/Pomodoro";
+import Checklist from "./pages/checklist/Checklist";
+import Chatbot from "./pages/chatbot/Chatbot";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Appointments from "./pages/appointments/Appointments";
+import Habit from "./pages/Habit";
+import Login from "./pages/auth/Login";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { SidebarProvider, useSidebar } from "./contexts/SidebarContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+
+const AppContent: React.FC = () => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
+        <div className="text-white text-center">
+          <div className="mb-4">🎯</div>
+          <p>Cargando Habitify...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
+  return (
+    <div className="h-screen w-full">
+      <SideBar />
+      <div className="flex-1" style={{ paddingLeft: '250px' }}>
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/appointments" element={<Appointments />} />
+          <Route path="/pomodoro" element={<Pomodoro />} />
+          <Route path="/checklist" element={<Checklist />} />
+          <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/habit" element={<Habit />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <SidebarProvider>
+        <Router basename="/Habitify">
+          <AppContent />
+        </Router>
+      </SidebarProvider>
+    </AuthProvider>
+  );
+}
+
+export default App;

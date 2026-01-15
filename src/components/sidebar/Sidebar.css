@@ -3,7 +3,7 @@
   --list-background-hover: #374151;
 }
 
-aside {
+.sidebar {
   /* I fix the sidebar to the left side of the screen */
   position: fixed;
   left: 0;
@@ -11,9 +11,61 @@ aside {
   background-color: var(--list-background);
   border-radius: 0.2rem;
   padding-left: 0;
-  width: 16rem;
+  height: 100vh;
+  top: 0;
+  padding-top: 2rem;
+  width: auto;
 }
 
+.sidebar.collapsed { width: 6rem; justify-content: center;}
+.sidebar.expanded { width: 16rem }
+
+.sidebar.collapsed li { 
+  justify-content: center;
+}
+.sidebar.collapsed .brand-title .title { 
+  display: none;
+}
+.sidebar.collapsed .streak-item { 
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  font-size: 0.7em;
+  margin-left: -0.1rem;
+}
+.sidebar.collapsed .icons { 
+  font-size: 1.5em;
+}
+.sidebar.collapsed .icons-emoji { 
+  font-size: 1em;
+}
+.sidebar.collapsed .labels  { 
+  display: none;
+}
+
+/* pin button */
+.sidebar.expanded .pin{ 
+  display: flex;
+}
+.sidebar.collapsed .pin {
+  display: none;
+}
+.pin-container{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  border-radius: 50%;
+  background-color: var(--list-background);
+  right: -0.8rem;
+}
+.pin {
+  rotate: calc(+30deg);
+  border-radius: 50%;
+  margin: 0;
+  padding: 0.4rem;
+  font-size: 1.1rem;
+}
 
 ul {
   background-color: var(--list-background);
@@ -61,7 +113,10 @@ li {
 
 button {
   background-color: var(--list-background);
-  width: 14.5rem;
+  width: 100%;
+  background: none;
+  border: none;
+  color: inherit;
   display: flex;
   align-items: center;
   margin: 0.5rem 0.5rem 0 0.7rem; /* top right bottom left */

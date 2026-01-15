@@ -11,6 +11,7 @@ export default defineConfig({
     tailwindcss(),
     tailwind(),
   ],
+  base: '/Habitify/',
   resolve: {
     alias : {
       '@': path.resolve(__dirname, 'src'),
