@@ -2,8 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
+import path from 'path'; 
 
-dotenv.config();
+dotenv.config({ path: path.resolve('./.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,7 @@ if (!API_KEY) {
   console.error('ERROR: GEMINI_API_KEY environment variable is not set');
   process.exit(1);
 }
+
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:5173'];
 
