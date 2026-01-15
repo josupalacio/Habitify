@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://josupalacio.github.io/Habitify",
   "scripts": {
     "dev": "vite",
     "electron": "electron electron/main.js",
@@ -13,7 +14,6 @@
     "deploy": "gh-pages -d dist",
     "start": "node backend/server.js"
   },
-  "homepage": "https://josupalacio.github.io/Habitify",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
