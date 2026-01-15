@@ -30,10 +30,11 @@ const Chatbot = () => {
 
   const sendMessageToBackend = async (userMessage) => {
     try {
+      // Llamada al backend
       const response = await fetch(`${BACKEND_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ message: "hola" }),
       });
 
 

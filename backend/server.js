@@ -17,8 +17,8 @@ if (!API_KEY) {
   process.exit(1);
 }
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://localhost:5173'];
 
 app.use(cors({
   origin: function (origin, callback) {
