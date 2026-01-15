@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import "./Appointments.css"
+import { useAppointments } from '../../hooks/useAppointments.js';
 
 interface Appointment {
-  id: number;
+  id: string;
   date: string;
   time: string;
   description: string;
@@ -13,15 +14,10 @@ interface Appointment {
 }
 
 const Appointments: React.FC = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([
-    { id: 1, date: '2026-01-10', time: '10:00', description: 'Reunión de hábitos semanales', status: 'TODO', priority: 'High' },
-    { id: 2, date: '2026-01-15', time: '14:30', description: 'Sesión de meditación', status: 'TODO', priority: 'Normal' },
-    { id: 3, date: '2026-01-12', time: '09:00', description: 'Entrenar ejercicio', status: 'InProgress', priority: 'Medium' },
-    { id: 4, date: '2026-01-05', time: '16:00', description: 'Completado: Lectura diaria', status: 'Completed', priority: 'Normal' },
-  ]);
+  const { appointments, loading, error, addAppointment, updateAppointment, deleteAppointment } = useAppointments();
 
   const [showForm, setShowForm] = useState(false);
-  const [draggedItem, setDraggedItem] = useState<number | null>(null);
+  const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [newAppointment, setNewAppointment] = useState({
     date: new Date().toISOString().split('T')[0],
     time: '',
@@ -30,27 +26,35 @@ const Appointments: React.FC = () => {
     priority: 'Normal' as const,
   });
 
-  const handleAddAppointment = () => {
+  const handleAddAppointment = async () => {
     if (newAppointment.date && newAppointment.time && newAppointment.description) {
-      const appointment: Appointment = {
-        id: Date.now(),
-        ...newAppointment,
-      };
-      setAppointments([...appointments, appointment]);
-      setNewAppointment({ date: new Date().toISOString().split('T')[0], time: '', description: '', status: 'TODO', priority: 'Normal' });
-      setShowForm(false);
+      try {
+        await addAppointment(newAppointment);
+        setNewAppointment({ date: new Date().toISOString().split('T')[0], time: '', description: '', status: 'TODO', priority: 'Normal' });
+        setShowForm(false);
+      } catch (err) {
+        console.error('Error adding appointment:', err);
+      }
     }
   };
 
-  const handleDelete = (id: number) => {
-    setAppointments(appointments.filter(app => app.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteAppointment(id);
+    } catch (err) {
+      console.error('Error deleting appointment:', err);
+    }
   };
 
-  const handleStatusChange = (id: number, newStatus: 'TODO' | 'InProgress' | 'Completed') => {
-    setAppointments(appointments.map(app => app.id === id ? { ...app, status: newStatus } : app));
+  const handleStatusChange = async (id: string, newStatus: 'TODO' | 'InProgress' | 'Completed') => {
+    try {
+      await updateAppointment(id, { status: newStatus });
+    } catch (err) {
+      console.error('Error updating appointment:', err);
+    }
   };
 
-  const handleDragStart = (e: React.DragEvent, id: number) => {
+  const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggedItem(id);
     e.dataTransfer.effectAllowed = 'move';
   };
