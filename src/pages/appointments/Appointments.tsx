@@ -16,6 +16,9 @@ interface Appointment {
 const Appointments: React.FC = () => {
   const { appointments, loading, error, addAppointment, updateAppointment, deleteAppointment } = useAppointments();
 
+  // Type assertion to fix 'never' errors from useAppointments hook
+  const typedAppointments = appointments as Appointment[];
+
   const [showForm, setShowForm] = useState(false);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [newAppointment, setNewAppointment] = useState({
@@ -72,7 +75,7 @@ const Appointments: React.FC = () => {
     }
   };
 
-  const countByStatus = (status: string) => appointments.filter(app => app.status === status).length;
+  const countByStatus = (status: string) => typedAppointments.filter(app => app.status === status).length;
 
   const getPriorityColor = (priority: string) => {
     switch(priority) {
@@ -83,9 +86,9 @@ const Appointments: React.FC = () => {
     }
   };
 
-  const getTodoAppointments = () => appointments.filter(app => app.status === 'TODO');
-  const getInProgressAppointments = () => appointments.filter(app => app.status === 'InProgress');
-  const getCompletedAppointments = () => appointments.filter(app => app.status === 'Completed');
+  const getTodoAppointments = () => typedAppointments.filter(app => app.status === 'TODO');
+  const getInProgressAppointments = () => typedAppointments.filter(app => app.status === 'InProgress');
+  const getCompletedAppointments = () => typedAppointments.filter(app => app.status === 'Completed');
 
   const getNextStatus = (currentStatus: string): 'TODO' | 'InProgress' | 'Completed' | null => {
     switch(currentStatus) {
@@ -105,6 +108,7 @@ const Appointments: React.FC = () => {
 
   return (
     <div className="container">
+      <div style={{background:'#fbbf24',color:'#222',padding:'8px',fontWeight:'bold',textAlign:'center'}}>Appointments page is rendering!</div>
       <div className='title-box'>
         <h1 className='title'>My Events</h1>
       </div>

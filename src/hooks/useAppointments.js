@@ -1,114 +1,53 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../context/AuthContext.jsx';
-import supabase from '../config/supabaseClient.js';
+import { useState } from 'react';
 
+// Hook sin conexión a base de datos, solo datos mockeados
 export const useAppointments = () => {
-  const { user } = useAuth();
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [appointments, setAppointments] = useState([
+    {
+      id: '1',
+      date: '2026-01-15',
+      time: '10:00',
+      description: 'Cita de ejemplo',
+      status: 'TODO',
+      priority: 'Normal',
+    },
+    {
+      id: '2',
+      date: '2026-01-16',
+      time: '15:00',
+      description: 'Otra cita',
+      status: 'InProgress',
+      priority: 'High',
+    },
+  ]);
+  const [loading] = useState(false);
+  const [error] = useState(null);
 
-  // Cargar citas al iniciar
-  useEffect(() => {
-    if (!user) return;
+  const addAppointment = async (appointment) => {
+    setAppointments(current => [
+      { ...appointment, id: (Math.random()*100000).toFixed(0) },
+      ...current
+    ]);
+  };
 
-    const fetchAppointments = async () => {
-      try {
-        setLoading(true);
-        const { data, error } = await supabase
-          .from('appointments')
-          .select('*')
-          .eq('user_id', user.uid)
-          .order('date', { ascending: true });
+  const updateAppointment = async (appointmentId, updates) => {
+    setAppointments(current =>
+      current.map(app =>
+        app.id === appointmentId ? { ...app, ...updates } : app
+      )
+    );
+  };
 
-        if (error) throw error;
-        setAppointments(data || []);
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-        console.error('Error fetching appointments:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const deleteAppointment = async (appointmentId) => {
+    setAppointments(current => current.filter(app => app.id !== appointmentId));
+  };
 
-    fetchAppointments();
-
-    // Suscribirse a cambios en tiempo real
-    const subscription = supabase
-      .from('appointments')
-      .on('*', payload => {
-        if (payload.new?.user_id === user.uid) {
-          setAppointments(current => {
-            const updated = current.filter(a => a.id !== payload.new.id);
-            return [payload.new, ...updated].sort((a, b) => 
-              new Date(a.date) - new Date(b.date)
-            );
-          });
-        }
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeSubscription(subscription);
-    };
-  }, [user]);
-
-  const addAppointment = useCallback(async (appointment) => {
-    if (!user) return;
-    try {
-      const { data, error } = await supabase
-        .from('appointments')
-        .insert([{ 
-          user_id: user.uid, 
-          ...appointment
-        }])
-        .select();
-
-      if (error) throw error;
-      return data[0];
-    } catch (err) {
-      console.error('Error adding appointment:', err);
-      throw err;
-    }
-  }, [user]);
-
-  const updateAppointment = useCallback(async (appointmentId, updates) => {
-    try {
-      const { data, error } = await supabase
-        .from('appointments')
-        .update(updates)
-        .eq('id', appointmentId)
-        .select();
-
-      if (error) throw error;
-      return data[0];
-    } catch (err) {
-      console.error('Error updating appointment:', err);
-      throw err;
-    }
-  }, []);
-
-  const deleteAppointment = useCallback(async (appointmentId) => {
-    try {
-      const { error } = await supabase
-        .from('appointments')
-        .delete()
-        .eq('id', appointmentId);
-
-      if (error) throw error;
-    } catch (err) {
-      console.error('Error deleting appointment:', err);
-      throw err;
-    }
-  }, []);
-
-  return { 
-    appointments, 
-    loading, 
-    error, 
-    addAppointment, 
-    updateAppointment, 
-    deleteAppointment 
+  return {
+    appointments,
+    loading,
+    error,
+    addAppointment,
+    updateAppointment,
+    deleteAppointment,
   };
 };

@@ -3,15 +3,15 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
-// Tu configuración de Firebase
+// Firebase configuration using Vite environment variables
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyCpohdwjXlOeamp8WNJq-MtaDWpt86p5z0",
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "getting-things-done-6eea2.firebaseapp.com",
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "getting-things-done-6eea2",
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "getting-things-done-6eea2.firebasestorage.app",
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "205723042166",
-  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:205723042166:web:1394ecf62f094062d0fa57",
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-M31E7LKYY7"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCpohdwjXlOeamp8WNJq-MtaDWpt86p5z0",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "getting-things-done-6eea2.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "getting-things-done-6eea2",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "getting-things-done-6eea2.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "205723042166",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:205723042166:web:1394ecf62f094062d0fa57",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-M31E7LKYY7"
 };
 
 // Initialize Firebase

@@ -1,5 +1,5 @@
 {
-  "name": "yourai",
+  "name": "habitify",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "start": "node backend/server.js"
   },
   "homepage": "https://josupalacio.github.io/Habitify",
   "dependencies": {

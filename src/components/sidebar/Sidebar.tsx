@@ -175,9 +175,18 @@ export const SideBar: React.FC = () => {
           </button>
 
 
-          {/* Render created habits */}
+          {/* Render created habits with navigation if path is set */}
           {Object.entries(sidebarItems).map(([key, item]) => (
-            <button key={key}>
+            <button
+              key={key}
+              onClick={() => {
+                if (item.path) {
+                  navigate(item.path);
+                } else {
+                  // Puedes mostrar un modal, toast, o simplemente no hacer nada
+                }
+              }}
+            >
               <li>
                 <span className="icons">{item.icon}</span>
                 <span className="labels">{item.label}</span>

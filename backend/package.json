@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js"
@@ -15,5 +16,6 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "node-fetch": "^2.7.0"
-  }
+  },
+  "devDependencies": {}
 }

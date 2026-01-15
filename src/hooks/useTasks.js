@@ -43,62 +43,29 @@ export const useTasks = () => {
             const updated = current.filter(t => t.id !== payload.new.id);
             return [payload.new, ...updated];
           });
-        }
-      })
-      .subscribe();
-
-    return () => {
-      supabase.removeSubscription(subscription);
-    };
-  }, [user]);
-
-  const addTask = useCallback(async (title) => {
-    if (!user) return;
-    try {
-      const { data, error } = await supabase
-        .from('tasks')
-        .insert([{ 
-          user_id: user.uid, 
-          title,
-          is_completed: false 
-        }])
-        .select();
-
-      if (error) throw error;
+        // Hook sin conexión a base de datos, solo datos mockeados
+        const [tasks, setTasks] = useState([
+          { id: '1', title: 'Tarea de ejemplo', is_completed: false },
+          { id: '2', title: 'Otra tarea', is_completed: true },
+        ]);
+        const [loading] = useState(false);
+        const [error] = useState(null);
       return data[0];
     } catch (err) {
-      console.error('Error adding task:', err);
-      throw err;
-    }
-  }, [user]);
-
-  const toggleTask = useCallback(async (taskId, isCompleted) => {
-    try {
-      const { error } = await supabase
-        .from('tasks')
-        .update({ is_completed: !isCompleted })
-        .eq('id', taskId);
-
+          setTasks(current => [
+            { id: (Math.random()*100000).toFixed(0), title, is_completed: false },
+            ...current
+          ]);
       if (error) throw error;
     } catch (err) {
       console.error('Error toggling task:', err);
-      throw err;
-    }
-  }, []);
-
-  const deleteTask = useCallback(async (taskId) => {
-    try {
-      const { error } = await supabase
-        .from('tasks')
-        .delete()
-        .eq('id', taskId);
-
-      if (error) throw error;
-    } catch (err) {
-      console.error('Error deleting task:', err);
-      throw err;
-    }
+          setTasks(current =>
+            current.map(task =>
+              task.id === taskId ? { ...task, is_completed: !isCompleted } : task
+            )
+          );
   }, []);
 
   return { tasks, loading, error, addTask, toggleTask, deleteTask };
-};
+          setTasks(current => current.filter(task => task.id !== taskId));
+      throw err;

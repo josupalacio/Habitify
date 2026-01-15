@@ -53,7 +53,7 @@ function App() {
   return (
     <AuthProvider>
       <SidebarProvider>
-        <Router basename="/Habitify">
+        <Router>
           <AppContent />
         </Router>
       </SidebarProvider>
