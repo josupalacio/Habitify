@@ -99,6 +99,7 @@ const Chatbot = () => {
                     <div className={`message-bubble ${msg.from === "user" ? "user" : "bot"}`}>
                       {msg.from === "bot" ? <MarkdownRenderer text={msg.text} /> : msg.text}
                     </div>
+                    <h1>holaaa</h1>
                   </div>
                 ))}
                 {isLoading && (
