@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
-import { ManageAccount } from "../../config/firebaseConnect";
-import supabase from "../../config/supabaseClient";
+import { ManageAccount } from "../../config/firebaseConnect.js";
+import supabase from "../../config/supabaseClient.js";
 
 const ModalSignup = ({ setShowModal }) => {
     const [email, setEmail] = useState("");

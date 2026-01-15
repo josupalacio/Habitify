@@ -28,7 +28,7 @@ import { IoHomeOutline, IoCalendarNumberOutline } from "react-icons/io5";
 import { BiLogOut } from "react-icons/bi";
 import { useSidebar } from "../../contexts/SidebarContext";
 import { useAuth } from "../../context/AuthContext";
-import { ManageAccount } from "../../config/firebaseConnect";
+import { ManageAccount } from "../../config/firebaseConnect.js";
 import Swal from 'sweetalert2';
 
 // Types

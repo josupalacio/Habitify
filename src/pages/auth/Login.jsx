@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
-import { ManageAccount } from "../config/firebaseConnect";
-import ModalSignup from "../components/auth/ModalSignup";
-import ForgotPassword from "../components/auth/ForgotPassword";
+import { ManageAccount } from "../../config/firebaseConnect.js";
+import ModalSignup from "../../components/auth/ModalSignup";
+import ForgotPassword from "../../components/auth/ForgotPassword";
 import "./Auth.css";
 
 const Login = () => {

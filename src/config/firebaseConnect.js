@@ -5,7 +5,7 @@ import {
   sendPasswordResetEmail 
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import { auth, db } from "./firebaseConfig";
+import { auth, db } from "./firebaseConfig.js";
 import Swal from 'sweetalert2';
 
 export class ManageAccount {
