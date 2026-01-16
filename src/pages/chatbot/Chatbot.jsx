@@ -34,7 +34,7 @@ const Chatbot = () => {
       const response = await fetch(`${BACKEND_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: "hola" }),
+        body: JSON.stringify({ message: userMessage }),
       });
 
 
@@ -99,7 +99,6 @@ const Chatbot = () => {
                     <div className={`message-bubble ${msg.from === "user" ? "user" : "bot"}`}>
                       {msg.from === "bot" ? <MarkdownRenderer text={msg.text} /> : msg.text}
                     </div>
-                    <h1>holaaa</h1>
                   </div>
                 ))}
                 {isLoading && (

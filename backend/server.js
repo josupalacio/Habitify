@@ -7,9 +7,11 @@ import path from 'path';
 dotenv.config({ path: path.resolve('./.env') });
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+app.use(cors())
 
 // Verificar que la API key esté configurada
 if (!API_KEY) {
@@ -18,7 +20,6 @@ if (!API_KEY) {
 }
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
-
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -56,7 +57,12 @@ app.post('/api/chat', async (req, res) => {
 
     // Preparar el payload para Gemini
     const payload = {
-      contents: chatHistory,
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: message }]
+        }
+      ]
     };
 
     // Llamar a la API de Gemini
@@ -105,6 +111,15 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`📝 Health check: http://localhost:${PORT}/health`);
+  const isRailway = !!process.env.RAILWAY_ENVIRONMENT;
+
+  console.log("✅ Server running");
+  console.log(`🧩 Environment: ${isRailway ? "Railway" : "Local"}`);
+  console.log(`🔌 Port: ${PORT}`);
+
+  if (isRailway) {
+    console.log("📝 Health check: /health");
+  } else {
+    console.log(`📝 Health check: http://localhost:${PORT}/health`);
+  }
 });
