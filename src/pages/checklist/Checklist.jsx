@@ -71,7 +71,7 @@ const Checklist = () => {
 
     return (
         <div className="checklist-container">
-
+            {/*}
             <div style={{
                 background: '#fbbf24',
                 color: '#222',
@@ -81,7 +81,7 @@ const Checklist = () => {
             }}>
                 Checklist page is rendering!
             </div>
-
+            */}
             <div className="checklist-header">
                 <p className="title">Check-Lists</p>
             </div>

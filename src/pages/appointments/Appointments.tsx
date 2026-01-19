@@ -30,16 +30,26 @@ const Appointments: React.FC = () => {
   });
 
   const handleAddAppointment = async () => {
-    if (newAppointment.date && newAppointment.time && newAppointment.description) {
-      try {
-        await addAppointment(newAppointment);
-        setNewAppointment({ date: new Date().toISOString().split('T')[0], time: '', description: '', status: 'TODO', priority: 'Normal' });
-        setShowForm(false);
-      } catch (err) {
-        console.error('Error adding appointment:', err);
-      }
+  if (newAppointment.date && newAppointment.time && newAppointment.description) {
+    try {
+      await addAppointment({
+        id: crypto.randomUUID(),
+        ...newAppointment,
+      });
+      setNewAppointment({
+        date: new Date().toISOString().split('T')[0],
+        time: '',
+        description: '',
+        status: 'TODO',
+        priority: 'Normal',
+      });
+      setShowForm(false);
+    } catch (err) {
+      console.error('Error adding appointment:', err);
     }
-  };
+  }
+};
+
 
   const handleDelete = async (id: string) => {
     try {
@@ -108,7 +118,7 @@ const Appointments: React.FC = () => {
 
   return (
     <div className="container">
-      <div style={{background:'#fbbf24',color:'#222',padding:'8px',fontWeight:'bold',textAlign:'center'}}>Appointments page is rendering!</div>
+      {/*<div style={{background:'#fbbf24',color:'#222',padding:'8px',fontWeight:'bold',textAlign:'center'}}>Appointments page is rendering!</div>*/}
       <div className='title-box'>
         <h1 className='title'>My Events</h1>
       </div>
@@ -195,6 +205,7 @@ const Appointments: React.FC = () => {
           <div className='section-header'>
             <h2>TODO <span className='count-badge'>{countByStatus('TODO')}</span></h2>
           </div>
+          <br />
           <div className='appointments-list'>
             {getTodoAppointments().map(app => (
               <div 
@@ -236,6 +247,7 @@ const Appointments: React.FC = () => {
         >
           <div className='section-header'>
             <h2>IN PROGRESS <span className='count-badge'>{countByStatus('InProgress')}</span></h2>
+            <br />
           </div>
           <div className='appointments-list'>
             {getInProgressAppointments().map(app => (
@@ -289,6 +301,7 @@ const Appointments: React.FC = () => {
             <h2>COMPLETED <span className='count-badge'>{countByStatus('Completed')}</span></h2>
           </div>
           <div className='appointments-list'>
+            <br />
             {getCompletedAppointments().map(app => (
               <div 
                 key={app.id} 

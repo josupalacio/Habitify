@@ -9,7 +9,7 @@
 .pomodoro-container {
     background-color: #1f2937; /* Same as sidebar background */
     color: white;
-    min-height: 100vh;
+    height: 40rem;
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -35,7 +35,6 @@
 }
 
 .pomodoro-body {
-    background-color: #374151;
     border-radius: 0.5rem;
     padding: 2rem;
     width: 100%;

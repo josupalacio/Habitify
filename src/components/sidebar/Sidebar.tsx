@@ -108,7 +108,7 @@ export const SideBar: React.FC = () => {
         <ul>
           <div className="brand-title">
             <img src={logoWhite} />
-            <p className="title">Habitify</p>
+            <p className="title">GTD</p>
             
             <span className="pin-container">
               <button 
