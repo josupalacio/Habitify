@@ -30,7 +30,8 @@ const Appointments: React.FC = () => {
   });
 
   const handleAddAppointment = async () => {
-    if (newAppointment.date && newAppointment.time && newAppointment.description) {
+    if
+     (newAppointment.date && newAppointment.time && newAppointment.description) {
       try {
         await addAppointment({
           description: newAppointment.description,
