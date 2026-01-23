@@ -7,6 +7,7 @@ export const useAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [forceUpdate, setForceUpdate] = useState(0); // Trigger for re-render
 
   // Función para cargar appointments
   const fetchAppointments = useCallback(async () => {
@@ -118,19 +119,48 @@ export const useAppointments = () => {
 
   const updateAppointment = useCallback(async (appointmentId, updates) => {
     try {
+      console.log('🔄 Updating appointment:', appointmentId, 'with updates:', updates);
+      console.log('👤 User authenticated:', !!user);
+      console.log('🔑 User UID:', user?.uid);
+      
       const { data, error } = await supabase
         .from('appointments')
         .update(updates)
         .eq('id', appointmentId)
+        .eq('uid', user.uid) // Asegurar que solo actualice del usuario actual
         .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Supabase update error:', error);
+        console.error('❌ Error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
+        throw error;
+      }
+      
+      console.log('✅ Appointment updated successfully:', data[0]);
+      
+      // Forzar actualización local inmediata
+      if (data && data[0]) {
+        setAppointments(current =>
+          current.map(a => a.id === appointmentId ? { ...a, ...data[0] } : a)
+        );
+        console.log('🔄 Local state updated immediately');
+        
+        // Forzar re-render del componente
+        setForceUpdate(prev => prev + 1);
+        console.log('🔄 Component re-render triggered');
+      }
+      
       return data[0];
     } catch (err) {
-      console.error('Error updating appointment:', err);
+      console.error('❌ Error updating appointment:', err);
       throw err;
     }
-  }, []);
+  }, [user]);
 
   const deleteAppointment = useCallback(async (appointmentId) => {
     try {
@@ -150,6 +180,7 @@ export const useAppointments = () => {
     appointments,
     loading,
     error,
+    forceUpdate, // Exponer para trigger re-render
     addAppointment,
     updateAppointment,
     deleteAppointment,

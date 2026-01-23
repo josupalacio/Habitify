@@ -14,7 +14,7 @@ interface Appointment {
 }
 
 const Appointments: React.FC = () => {
-  const { appointments, loading, error, addAppointment, updateAppointment, deleteAppointment } = useAppointments();
+  const { appointments, loading, error, addAppointment, updateAppointment, deleteAppointment, forceUpdate } = useAppointments();
 
   // Type assertion to fix 'never' errors from useAppointments hook
   const typedAppointments = appointments as Appointment[];
@@ -65,9 +65,21 @@ const Appointments: React.FC = () => {
 
   const handleStatusChange = async (id: string, newStatus: 'TODO' | 'InProgress' | 'Completed') => {
     try {
-      await updateAppointment(id, { status: newStatus });
+      console.log('🔄 Changing status for appointment:', id, 'to:', newStatus);
+      console.log('📱 Button clicked - starting update process...');
+      
+      const result = await updateAppointment(id, { status: newStatus });
+      
+      console.log('✅ Status changed successfully');
+      console.log('📊 Update result:', result);
+      console.log('🔄 Force update trigger:', forceUpdate);
+      
+      // El forceUpdate debería causar re-render automático
+      
     } catch (err) {
-      console.error('Error updating appointment:', err);
+      console.error('❌ Error updating appointment:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      alert(`Error updating appointment status: ${errorMessage}`);
     }
   };
 

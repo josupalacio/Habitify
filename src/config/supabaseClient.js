@@ -12,6 +12,13 @@ if (!supabaseAnonKey && !import.meta.env.VITE_SUPABASE_ANON_KEY) {
   console.error('📝 Obtén tu Publishable key desde: https://app.supabase.com → Tu Proyecto → Settings → API');
 }
 
+console.log('🔌 Supabase Config Debug:', {
+  url: supabaseUrl,
+  hasKey: !!supabaseAnonKey,
+  keyLength: supabaseAnonKey?.length || 0,
+  keyPrefix: supabaseAnonKey?.substring(0, 10) + '...' || 'NO_KEY'
+});
+
 const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: false,
