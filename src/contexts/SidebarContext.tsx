@@ -22,8 +22,8 @@ interface SidebarProviderProps {
 }
 
 export const SidebarProvider: React.FC<SidebarProviderProps> = ({ children }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isPinned, setIsPinned] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [isPinned, setIsPinned] = useState(true);
 
   return (
     <SidebarContext.Provider value={{ isExpanded, setIsExpanded, isPinned, setIsPinned }}>

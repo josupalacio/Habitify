@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
 import supabase from '../config/supabaseClient.js';
 
@@ -18,9 +18,9 @@ export const useHabits = () => {
         const { data, error } = await supabase
           .from('habits')
           .select('*')
-          .eq('user_id', user.uid)
+          .eq('uid', user.uid)  // Corregido: user_id -> uid
           .eq('is_active', true)
-          .order('created_at', { ascending: false });
+          .order('sort_order', { ascending: false });  // Corregido: created_at -> sort_order
 
         if (error) throw error;
         setHabits(data || []);
@@ -39,7 +39,7 @@ export const useHabits = () => {
     const subscription = supabase
       .from('habits')
       .on('*', payload => {
-        if (payload.new?.user_id === user.uid) {
+        if (payload.new?.uid === user.uid) {  // Corregido: user_id -> uid
           setHabits(current => {
             const updated = current.filter(h => h.id !== payload.new.id);
             if (payload.new.is_active) {
@@ -56,14 +56,15 @@ export const useHabits = () => {
     };
   }, [user]);
 
-  const addHabit = useCallback(async (habit) => {
+  const addHabit = async (habitData) => {
     if (!user) return;
     try {
       const { data, error } = await supabase
         .from('habits')
         .insert([{ 
-          user_id: user.uid, 
-          ...habit,
+          uid: user.uid,  // Corregido: user_id -> uid
+          ...habitData,
+          sort_order: Date.now(),  // Agregar sort_order para ordenamiento
           is_active: true
         }])
         .select();
@@ -74,9 +75,9 @@ export const useHabits = () => {
       console.error('Error adding habit:', err);
       throw err;
     }
-  }, [user]);
+  };
 
-  const updateHabit = useCallback(async (habitId, updates) => {
+  const updateHabit = async (habitId, updates) => {
     try {
       const { data, error } = await supabase
         .from('habits')
@@ -90,37 +91,49 @@ export const useHabits = () => {
       console.error('Error updating habit:', err);
       throw err;
     }
-  }, []);
+  };
 
-  const completeHabit = useCallback(async (habitId) => {
+  const toggleHabitCompletion = async (habitId, date, completed = true) => {
     try {
-      // Get current streak count
-      const { data: currentData } = await supabase
-        .from('habits')
-        .select('streak_count')
-        .eq('id', habitId)
+      const { data, error } = await supabase
+        .from('habit_records')
+        .upsert({
+          habit_id: habitId,
+          uid: user.uid,  // Corregido: user_id -> uid
+          record_date: date,
+          completed,
+          time_completed: completed ? new Date().toTimeString().slice(0, 5) : null
+        })
+        .select()
         .single();
 
-      const newStreakCount = (currentData?.streak_count || 0) + 1;
-
-      const { data, error } = await supabase
-        .from('habits')
-        .update({ 
-          last_completed_at: new Date().toISOString(),
-          streak_count: newStreakCount
-        })
-        .eq('id', habitId)
-        .select();
-
       if (error) throw error;
-      return data[0];
+      return data;
     } catch (err) {
-      console.error('Error completing habit:', err);
+      console.error('Error toggling habit completion:', err);
       throw err;
     }
-  }, []);
+  };
 
-  const deleteHabit = useCallback(async (habitId) => {
+  const getHabitRecords = async (habitId, startDate, endDate) => {
+    try {
+      const { data, error } = await supabase
+        .from('habit_records')
+        .select('*')
+        .eq('habit_id', habitId)
+        .gte('record_date', startDate)
+        .lte('record_date', endDate)
+        .order('record_date', { ascending: true });
+
+      if (error) throw error;
+      return data || [];
+    } catch (err) {
+      console.error('Error fetching habit records:', err);
+      return [];
+    }
+  };
+
+  const deleteHabit = async (habitId) => {
     try {
       const { error } = await supabase
         .from('habits')
@@ -132,7 +145,7 @@ export const useHabits = () => {
       console.error('Error deleting habit:', err);
       throw err;
     }
-  }, []);
+  };
 
   return { 
     habits, 
@@ -140,7 +153,8 @@ export const useHabits = () => {
     error, 
     addHabit, 
     updateHabit, 
-    completeHabit, 
+    toggleHabitCompletion,
+    getHabitRecords,
     deleteHabit 
   };
 };

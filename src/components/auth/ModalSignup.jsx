@@ -81,6 +81,26 @@ const ModalSignup = ({ setShowModal }) => {
                 createdAt: new Date().toISOString()
             });
 
+            // 3. Crear usuario en Supabase
+            const nameParts = (name || nickname || '').trim().split(' ');
+            const firstName = nameParts[0] || nickname || '';
+            const lastName = nameParts.slice(1).join(' ') || '';
+
+            const { error: supabaseError } = await supabase
+                .from('users')
+                .insert([{
+                    uid: userUid,
+                    email: email,
+                    username: nickname,
+                    first_name: firstName,
+                    last_name: lastName
+                }]);
+
+            if (supabaseError) {
+                console.error('Error creating user in Supabase:', supabaseError);
+                // No bloqueamos el registro si falla Supabase, solo lo registramos
+            }
+
             Swal.fire({
                 icon: 'success',
                 title: '¡Registro Exitoso!',

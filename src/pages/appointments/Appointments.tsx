@@ -30,25 +30,28 @@ const Appointments: React.FC = () => {
   });
 
   const handleAddAppointment = async () => {
-  if (newAppointment.date && newAppointment.time && newAppointment.description) {
-    try {
-      await addAppointment({
-        id: crypto.randomUUID(),
-        ...newAppointment,
-      });
-      setNewAppointment({
-        date: new Date().toISOString().split('T')[0],
-        time: '',
-        description: '',
-        status: 'TODO',
-        priority: 'Normal',
-      });
-      setShowForm(false);
-    } catch (err) {
-      console.error('Error adding appointment:', err);
+    if (newAppointment.date && newAppointment.time && newAppointment.description) {
+      try {
+        await addAppointment({
+          description: newAppointment.description,
+          status: newAppointment.status,
+          priority: newAppointment.priority,
+          date: newAppointment.date,
+          time: newAppointment.time,
+        });
+        setNewAppointment({
+          date: new Date().toISOString().split('T')[0],
+          time: '',
+          description: '',
+          status: 'TODO',
+          priority: 'Normal',
+        });
+        setShowForm(false);
+      } catch (err) {
+        console.error('Error adding appointment:', err);
+      }
     }
-  }
-};
+  };
 
 
   const handleDelete = async (id: string) => {
@@ -115,6 +118,32 @@ const Appointments: React.FC = () => {
       default: return null;
     }
   };
+
+  if (loading) {
+    return (
+      <div className="container">
+        <div className='title-box'>
+          <h1 className='title'>My Events</h1>
+        </div>
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#e5e7eb' }}>
+          Loading appointments...
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container">
+        <div className='title-box'>
+          <h1 className='title'>My Events</h1>
+        </div>
+        <div style={{ textAlign: 'center', padding: '2rem', color: '#ef4444' }}>
+          Error: {error}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container">

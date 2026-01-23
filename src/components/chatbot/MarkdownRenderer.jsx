@@ -11,128 +11,59 @@ const MarkdownRenderer = ({ text }) => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Parse markdown text to JSX
   const parseMarkdown = (content) => {
-    const elements = [];
-    let lastIndex = 0;
+    // 1. LIMPIEZA DE ESPACIOS RAROS:
+    // Eliminamos espacios en blanco al inicio de cada línea que Gemini usa para "sangría"
+    const cleanContent = content
+      .split("\n")
+      .map(line => line.replace(/^\s+/, "")) // Esto quita el margin raro del inicio
+      .join("\n")
+      .trim();
 
-    // Regex para detectar:
-    // **bold**, *italic*, `code`, - list items, números con ., saltos de línea
-    const regex = /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|-\s+[^\n]+|\d+\.\s+[^\n]+|\n\n|\n)/g;
+    // 2. REGEX: Detecta negritas, itálicas, listas y saltos de línea
+    // Mejorada para capturar negritas incluso si están al inicio de línea
+    const regex = /(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|^-\s+.+|^\d+\.\s+.+|\n)/gm;
+    
+    const parts = cleanContent.split(regex);
+    
+    return parts.map((part, idx) => {
+      if (!part) return null;
 
-    let match;
-    const matches = [];
-
-    while ((match = regex.exec(content)) !== null) {
-      if (match.index > lastIndex) {
-        matches.push({
-          type: "text",
-          content: content.substring(lastIndex, match.index),
-        });
+      // NEGRITAS **texto**
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return <strong key={idx}>{part.slice(2, -2)}</strong>;
+      } 
+      // ITÁLICAS *texto*
+      if (part.startsWith("*") && part.endsWith("*")) {
+        return <em key={idx}>{part.slice(1, -1)}</em>;
+      } 
+      // CÓDIGO `texto`
+      if (part.startsWith("`") && part.endsWith("`")) {
+        return <code key={idx} className="inline-code">{part.slice(1, -1)}</code>;
+      } 
+      // LISTAS - item
+      if (part.startsWith("- ")) {
+        return <div key={idx} className="list-item">• {part.slice(2)}</div>;
+      } 
+      // LISTAS NUMERADAS 1. item
+      if (part.match(/^\d+\./)) {
+        return <div key={idx} className="ordered-item">{part}</div>;
+      }
+      // SALTOS DE LÍNEA
+      if (part === "\n") {
+        return <br key={idx} />;
       }
 
-      const matched = match[0];
-
-      if (matched.startsWith("**") && matched.endsWith("**")) {
-        matches.push({
-          type: "bold",
-          content: matched.slice(2, -2),
-        });
-      } else if (matched.startsWith("*") && matched.endsWith("*")) {
-        matches.push({
-          type: "italic",
-          content: matched.slice(1, -1),
-        });
-      } else if (matched.startsWith("`") && matched.endsWith("`")) {
-        matches.push({
-          type: "code",
-          content: matched.slice(1, -1),
-        });
-      } else if (matched.startsWith("-")) {
-        matches.push({
-          type: "listItem",
-          content: matched.slice(2).trim(),
-        });
-      } else if (matched.match(/^\d+\./)) {
-        matches.push({
-          type: "orderedItem",
-          content: matched.slice(matched.indexOf(".") + 1).trim(),
-        });
-      } else if (matched === "\n\n") {
-        matches.push({
-          type: "paragraph",
-          content: null,
-        });
-      } else if (matched === "\n") {
-        matches.push({
-          type: "linebreak",
-          content: null,
-        });
-      }
-
-      lastIndex = match.index + matched.length;
-    }
-
-    if (lastIndex < content.length) {
-      matches.push({
-        type: "text",
-        content: content.substring(lastIndex),
-      });
-    }
-
-    // Convertir matches a JSX
-    return matches.map((match, idx) => {
-      switch (match.type) {
-        case "bold":
-          return <strong key={idx}>{match.content}</strong>;
-        case "italic":
-          return <em key={idx}>{match.content}</em>;
-        case "code":
-          return (
-            <code key={idx} className="inline-code">
-              {match.content}
-            </code>
-          );
-        case "listItem":
-          return (
-            <div key={idx} className="list-item">
-              • {match.content}
-            </div>
-          );
-        case "orderedItem":
-          return (
-            <div key={idx} className="ordered-item">
-              {match.content}
-            </div>
-          );
-        case "paragraph":
-          return <div key={idx} className="paragraph-break" />;
-        case "linebreak":
-          return <br key={idx} />;
-        case "text":
-        default:
-          return <span key={idx}>{match.content}</span>;
-      }
+      // TEXTO PLANO
+      return <span key={idx}>{part}</span>;
     });
   };
 
   return (
     <div className="markdown-container">
       <div className="markdown-content">{parseMarkdown(text)}</div>
-      <button
-        className="copy-button"
-        onClick={copyToClipboard}
-        title="Copiar al portapapeles"
-      >
-        {copied ? (
-          <>
-            <FaCheck /> Copiado
-          </>
-        ) : (
-          <>
-            <FaCopy /> Copiar
-          </>
-        )}
+      <button className="copy-button" onClick={copyToClipboard}>
+        {copied ? <><FaCheck /> Copiado</> : <><FaCopy /> Copiar</>}
       </button>
     </div>
   );

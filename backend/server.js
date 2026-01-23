@@ -2,14 +2,24 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
-import path from 'path'; 
+import path from 'path';
+import { Pool } from 'pg'; 
 
-dotenv.config({ path: path.resolve('./.env') });
+dotenv.config({ path: path.resolve('./backend/.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+// Configuración de base de datos PostgreSQL
+const pool = new Pool({
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'habitify',
+  password: process.env.DB_PASSWORD || 'password',
+  port: process.env.DB_PORT || 5432,
+});
 
 app.use(cors())
 
@@ -101,6 +111,98 @@ app.post('/api/chat', async (req, res) => {
 app.post('/api/chat/reset', (req, res) => {
   chatHistory = [];
   res.json({ message: 'Chat history reset' });
+});
+
+// Ruta para crear un nuevo hábito
+app.post('/api/habits', async (req, res) => {
+  const { user_id, name, color, is_glossy, description, frequency, time_preference, icon_key } = req.body;
+  
+  try {
+    // Obtener el máximo sort_order para el usuario
+    const maxOrderResult = await pool.query(
+      'SELECT COALESCE(MAX(sort_order), 0) as max_order FROM habits WHERE user_id = $1',
+      [user_id]
+    );
+    const newSortOrder = maxOrderResult.rows[0].max_order + 1;
+    
+    const query = `
+      INSERT INTO habits (user_id, name, color, is_glossy, description, frequency, time_preference, icon_key, sort_order)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      RETURNING *
+    `;
+    
+    const values = [user_id, name, color, is_glossy, description, frequency, time_preference, icon_key, newSortOrder];
+    const result = await pool.query(query, values);
+    
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error creating habit:', error);
+    res.status(500).json({ error: 'Error creating habit' });
+  }
+});
+
+// Ruta para obtener todos los hábitos de un usuario
+app.get('/api/habits/:user_id', async (req, res) => {
+  const { user_id } = req.params;
+  
+  try {
+    const query = `
+      SELECT * FROM habits 
+      WHERE user_id = $1 AND is_active = true 
+      ORDER BY sort_order DESC, created_at DESC
+    `;
+    const result = await pool.query(query, [user_id]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching habits:', error);
+    res.status(500).json({ error: 'Error fetching habits' });
+  }
+});
+
+// Ruta para actualizar un hábito
+app.put('/api/habits/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, color, is_glossy, description, frequency, time_preference, icon_key } = req.body;
+  
+  try {
+    const query = `
+      UPDATE habits 
+      SET name = $1, color = $2, is_glossy = $3, description = $4, frequency = $5, time_preference = $6, icon_key = $7
+      WHERE id = $8
+      RETURNING *
+    `;
+    
+    const values = [name, color, is_glossy, description, frequency, time_preference, icon_key, id];
+    const result = await pool.query(query, values);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Habit not found' });
+    }
+    
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Error updating habit:', error);
+    res.status(500).json({ error: 'Error updating habit' });
+  }
+});
+
+// Ruta para eliminar un hábito (soft delete)
+app.delete('/api/habits/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const query = 'UPDATE habits SET is_active = false WHERE id = $1 RETURNING *';
+    const result = await pool.query(query, [id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Habit not found' });
+    }
+    
+    res.json({ message: 'Habit deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting habit:', error);
+    res.status(500).json({ error: 'Error deleting habit' });
+  }
 });
 
 // Error handler

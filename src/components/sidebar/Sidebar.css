@@ -3,11 +3,10 @@
   --list-background-hover: #374151;
 }
 
+/* ------------------ Sidebar ------------------ */
 .sidebar {
-  /* I fix the sidebar to the left side of the screen */
   position: fixed;
   left: 0;
-  /* ------------------------------------------------ */
   background-color: var(--list-background);
   border-radius: 0.2rem;
   padding-left: 0;
@@ -15,17 +14,14 @@
   top: 0;
   padding-top: 2rem;
   width: auto;
+  transition: width 0.3s ease;
 }
 
 .sidebar.collapsed { width: 6rem; justify-content: center;}
 .sidebar.expanded { width: 16rem }
 
-.sidebar.collapsed li { 
-  justify-content: center;
-}
-.sidebar.collapsed .brand-title .title { 
-  display: none;
-}
+.sidebar.collapsed li { justify-content: center; }
+.sidebar.collapsed .brand-title .title { display: none; }
 .sidebar.collapsed .streak-item { 
   justify-content: flex-start;
   align-items: center;
@@ -33,23 +29,13 @@
   font-size: 0.7em;
   margin-left: -0.1rem;
 }
-.sidebar.collapsed .icons { 
-  font-size: 1.5em;
-}
-.sidebar.collapsed .icons-emoji { 
-  font-size: 1em;
-}
-.sidebar.collapsed .labels  { 
-  display: none;
-}
+.sidebar.collapsed .icons { font-size: 1.5em; }
+.sidebar.collapsed .icons-emoji { font-size: 1em; }
+.sidebar.collapsed .labels  { display: none; }
 
 /* pin button */
-.sidebar.expanded .pin{ 
-  display: flex;
-}
-.sidebar.collapsed .pin {
-  display: none;
-}
+.sidebar.expanded .pin { display: flex; }
+.sidebar.collapsed .pin { display: none; }
 .pin-container{
   position: absolute;
   display: flex;
@@ -113,19 +99,31 @@ li {
 
 button {
   background-color: var(--list-background);
-  width: 100%;
+  width: 100% - 2vw;
   background: none;
   border: none;
   color: inherit;
   display: flex;
   align-items: center;
   margin: 0.5rem 0.5rem 0 0.7rem; /* top right bottom left */
-  padding-left: 0; /* center the elements to the left */
+  padding-left: 0;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
 button:hover {
   background-color: var(--list-background-hover);
   border-color: var(--list-background-hover);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+button:active {
+  outline: none;
+  box-shadow: none;
 }
 
 .icons {
@@ -154,25 +152,381 @@ button:hover {
   cursor: pointer;
   user-select: none;
   transition: background-color 0.2s ease;
-
   width: 12.5rem;
   margin: 0.5rem 0 0 0.7rem;
 }
 
 /* Icono dentro del streak */
-.icons {
-  display: flex;
-  align-items: center;
-  font-size: 1em; 
-}
-
 .icons-emoji {
-  font-size: 1.5em; /* tamaño más grande solo para el fuego */
+  font-size: 1em; /* tamaño más grande solo para el fuego */
   margin-left: 0.25rem; /* espacio entre número y emoji */
 }
 
-.labels {
+/* ------------------ Habits Tech Glow ------------------ */
+
+/* Estudiar - morado tech */
+.habits.estudiar .labels {
+  background: linear-gradient(145deg, #b55fff, #9b59b6, #7d3c98);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 2px #fff, 0 0 4px #b55fff;
+  font-weight: bold;
+  position: relative;
+}
+.habits.estudiar .icons {
+  color: #9b59b6;
+  text-shadow: 0 0 3px #fff, 0 0 6px #b55fff;
+}
+
+/* Leer - azul tech */
+.habits.leer .labels {
+  background: linear-gradient(145deg, #55f0ff, #1abcff, #1581d1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 2px #fff, 0 0 4px #55f0ff;
+  font-weight: bold;
+  position: relative;
+}
+.habits.leer .icons {
+  color: #1abcff;
+  text-shadow: 0 0 2px #fff, 0 0 4px #55f0ff;
+}
+
+/* Gym - verde tech */
+.habits.gym .labels {
+  background: linear-gradient(145deg, #00ff7f, #2ecc71, #27ae60);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 2px #fff, 0 0 4px #00ff7f;
+  font-weight: bold;
+  position: relative;
+}
+.habits.gym .icons {
+  color: #2ecc71;
+  text-shadow: 0 0 2px #fff, 0 0 4px #00ff7f;
+}
+
+/* Estrellita que titila para todas */
+.habits .labels::after {
+  content: '✨';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  font-size: 0.8em;
+  opacity: 0.5;
+  animation: twinkle 1.5s infinite;
+}
+@keyframes twinkle {
+  0%   { opacity: 0.2; transform: scale(0.9) rotate(0deg); }
+  25%  { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
+  50%  { opacity: 0.3; transform: scale(1) rotate(-5deg); }
+  75%  { opacity: 0.6; transform: scale(1.05) rotate(3deg); }
+  100% { opacity: 0.2; transform: scale(0.95) rotate(-2deg); }
+}
+
+.habits.estudiar .icons svg {
+  color: #9b59b6; /* morado tech */
+  filter: drop-shadow(0 0 4px #b55fff);
+}
+
+.habits.leer .icons svg {
+  color: #1abcff; /* azul */
+  filter: drop-shadow(0 0 4px #55f0ff);
+}
+
+.habits.gym .icons svg {
+  color: #2ecc71; /* verde */
+  filter: drop-shadow(0 0 4px #00ff7f);
+}
+
+.logout {
+  position: absolute;
+  bottom: 5rem;
+}
+
+/* Efecto Glossy para hábitos dinámicos */
+.glossy-habit {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+  border-radius: 8px;
+}
+
+.glossy-habit::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255,255,255,0.1) 50%,
+    transparent 70%
+  );
+  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+.glossy-habit::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.2) 0%,
+    rgba(255,255,255,0.05) 50%,
+    transparent 100%
+  );
+  border-radius: 8px 8px 0 0;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+.glossy-habit .icons {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.glossy-habit .labels {
+  position: relative;
+  z-index: 1;
+  font-weight: 600;
+  text-shadow: 0 0 4px rgba(0,0,0,0.3);
+}
+
+/* Efecto glossy específico para hábitos fijos con sus colores */
+.habits.estudiar.glossy-habit {
+  background: linear-gradient(135deg, 
+    rgba(181, 95, 255, 0.2) 0%, 
+    rgba(155, 89, 182, 0.1) 50%, 
+    rgba(125, 60, 152, 0.05) 100%);
+}
+
+.habits.estudiar.glossy-habit::before {
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(181, 95, 255, 0.2) 50%,
+    transparent 70%
+  );
+}
+
+.habits.estudiar.glossy-habit::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(181, 95, 255, 0.3) 0%,
+    rgba(181, 95, 255, 0.1) 50%,
+    transparent 100%
+  );
+}
+
+.habits.leer.glossy-habit {
+  background: linear-gradient(135deg, 
+    rgba(85, 240, 255, 0.2) 0%, 
+    rgba(26, 188, 255, 0.1) 50%, 
+    rgba(21, 129, 209, 0.05) 100%);
+}
+
+.habits.leer.glossy-habit::before {
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(85, 240, 255, 0.2) 50%,
+    transparent 70%
+  );
+}
+
+.habits.leer.glossy-habit::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(85, 240, 255, 0.3) 0%,
+    rgba(85, 240, 255, 0.1) 50%,
+    transparent 100%
+  );
+}
+
+.habits.gym.glossy-habit {
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 127, 0.2) 0%, 
+    rgba(46, 204, 113, 0.1) 50%, 
+    rgba(39, 174, 96, 0.05) 100%);
+}
+
+.habits.gym.glossy-habit::before {
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(0, 255, 127, 0.2) 50%,
+    transparent 70%
+  );
+}
+
+.habits.gym.glossy-habit::after {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 255, 127, 0.3) 0%,
+    rgba(0, 255, 127, 0.1) 50%,
+    transparent 100%
+  );
+}
+
+/* Estilos para hábitos personalizados con color dinámico */
+.habits.custom-habit .labels {
+  background: linear-gradient(145deg, var(--habit-color), color-mix(in srgb, var(--habit-color) 80%, black), color-mix(in srgb, var(--habit-color) 60%, black));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 2px #fff, 0 0 4px var(--habit-color);
+  font-weight: bold;
+  position: relative;
+}
+
+.habits.custom-habit .icons {
+  color: var(--habit-color);
+  text-shadow: 0 0 3px #fff, 0 0 6px var(--habit-color);
+}
+
+.habits.custom-habit .icons svg {
+  color: var(--habit-color);
+  filter: drop-shadow(0 0 4px var(--habit-color));
+}
+
+/* Efecto surf brillante para hábitos personalizados */
+.habits.custom-habit {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, 
+    rgba(255,255,255,0.1) 0%, 
+    rgba(255,255,255,0.05) 50%, 
+    rgba(255,255,255,0) 100%);
+  border-radius: 8px;
+}
+
+.habits.custom-habit::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255,255,255,0.2) 50%,
+    transparent 70%
+  );
+  animation: shimmer 2s infinite;
+  pointer-events: none;
+}
+
+.habits.custom-habit::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.3) 0%,
+    rgba(255,255,255,0.1) 50%,
+    transparent 100%
+  );
+  border-radius: 8px 8px 0 0;
+  pointer-events: none;
+}
+
+/* Efecto glossy específico para hábitos personalizados con su color */
+.habits.custom-habit.glossy-habit {
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--habit-color) 20%, transparent) 0%, 
+    color-mix(in srgb, var(--habit-color) 10%, transparent) 50%, 
+    color-mix(in srgb, var(--habit-color) 5%, transparent) 100%);
+}
+
+.habits.custom-habit.glossy-habit::before {
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    color-mix(in srgb, var(--habit-color) 20%, rgba(255,255,255,0.3)) 50%,
+    transparent 70%
+  );
+}
+
+.habits.custom-habit.glossy-habit::after {
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--habit-color) 30%, rgba(255,255,255,0.2)) 0%,
+    color-mix(in srgb, var(--habit-color) 10%, rgba(255,255,255,0.1)) 50%,
+    transparent 100%
+  );
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+/* Estilos para contenedor de hábitos con botón de eliminar */
+.habit-item-container {
+  position: relative;
   display: flex;
   align-items: center;
-  font-size: 1rem;
+}
+
+.habit-item-container .delete-habit-btn {
+  position: absolute;
+  right: 8px;
+  background: rgba(239, 68, 68, 0.8);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  padding: 4px 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.habit-item-container:hover .delete-habit-btn {
+  opacity: 1;
+}
+
+.habit-item-container .delete-habit-btn:hover {
+  background: rgba(220, 38, 38, 0.9);
+  transform: scale(1.1);
+}
+
+.habit-item-container .habits {
+  flex: 1;
+  padding-right: 40px; /* Espacio para el botón de eliminar */
+}
+
+/* Estrellita que titila para hábitos personalizados */
+.habits.custom-habit .labels::after {
+  content: '✨';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  font-size: 0.8em;
+  opacity: 0.5;
+  animation: twinkle 1.5s infinite;
 }

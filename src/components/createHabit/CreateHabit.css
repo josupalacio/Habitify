@@ -5,7 +5,8 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Fondo semi-transparente */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,8 +27,10 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   position: relative;
   display: flex;
-  flex-direction: column; /* Organiza el contenido verticalmente */
-  gap: 1rem; /* Espacio entre elementos */
+  flex-direction: column;
+  /* Organiza el contenido verticalmente */
+  gap: 1rem;
+  /* Espacio entre elementos */
 
   transform: translateY(-20px);
   animation: slideIn 0.3s forwards;
@@ -37,10 +40,15 @@
 
 /* Animaciones */
 @keyframes fadeIn {
-  to { opacity: 1; }
+  to {
+    opacity: 1;
+  }
 }
+
 @keyframes slideIn {
-  to { transform: translateY(0); }
+  to {
+    transform: translateY(0);
+  }
 }
 
 /* Botón de cerrar */
@@ -61,13 +69,17 @@
 /* Formulario */
 .modal form {
   display: flex;
-  flex-direction: column; /* Vertical */
-  gap: 1rem; /* Espacio entre inputs */
+  flex-direction: column;
+  /* Vertical */
+  gap: 1rem;
+  /* Espacio entre inputs */
   margin-top: 1rem;
 }
 
 /* Inputs */
-.modal input, .modal select, .modal textarea {
+.modal input,
+.modal select,
+.modal textarea {
   padding: 0.6rem 0.8rem;
   border-radius: 8px;
   border: none;
@@ -77,7 +89,8 @@
 
 /* Botón de crear */
 .modal button.btn-create {
-  background-color: #10b981; /* verde brillante */
+  background-color: #10b981;
+  /* verde brillante */
   color: #fff;
   padding: 0.6rem 1rem;
   border-radius: 8px;
@@ -89,4 +102,161 @@
 
 .modal button.btn-create:hover {
   background-color: #059669;
+}
+
+.style-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.style-box input {
+  flex: 1;
+}
+
+.style-box p {
+  align-self: center;
+}
+
+.icon-picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  background-color: #374151;
+  border: 1px solid #4b5563;
+  cursor: pointer;
+  font-size: 1.2rem;
+
+  line-height: 1rem;
+  margin-left: auto;
+  margin-top: auto;
+
+  align-content: center;
+  padding: 0;
+}
+
+
+.color-circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: transform 0.2s;
+}
+
+.color-circle:hover {
+  transform: scale(1.2);
+}
+
+.picker-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-dropper {
+  background: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+/* Efecto Glossy dinámico */
+.glossy-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.glossy-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+}
+
+/* Contenedor relativo para posicionar el dropdown */
+.icon-selector-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.icon-picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon-picker:hover {
+  transform: scale(1.1);
+}
+
+/* El menú desplegable */
+.icon-dropdown {
+  position: absolute;
+  top: 110%;
+  /* Justo debajo del botón */
+  right: 0;
+  background-color: #374151;
+  /* Color gris oscuro acorde a tu modal */
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 iconos por fila */
+  gap: 8px;
+  padding: 10px;
+  z-index: 1100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.icon-option {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.icon-option:hover {
+  background-color: #4b5563;
+}
+
+.icon-option.active {
+  background-color: #10b981;
+  /* Verde esmeralda si está seleccionado */
+}
+
+/* Paleta de colores sugeridos */
+.suggested-palette {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.color-circle.active {
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4),
+    0 0 10px currentColor;
+  transform: scale(1.15);
 }

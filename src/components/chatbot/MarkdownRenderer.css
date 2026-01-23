@@ -5,8 +5,23 @@
 
 .markdown-content {
   word-wrap: break-word;
-  white-space: pre-wrap;
+  /* Cambia pre-wrap por normal o break-spaces si usas etiquetas <br> manuales */
+  white-space: normal; 
   line-height: 1.6;
+}
+
+/* Para que los br realmente salten la línea en modo normal */
+.markdown-content br {
+  content: "";
+  display: block;
+  margin: 0.5rem 0;
+}
+
+/* Asegúrate de que las negritas resalten bien */
+.markdown-content strong {
+  font-weight: bold;
+  color: #fbbf24;
+  display: inline; /* Evita que salten de línea */
 }
 
 .markdown-content strong {
@@ -68,4 +83,33 @@
 .copy-button svg {
   width: 1rem;
   height: 1rem;
+}
+
+
+.markdown-content {
+  word-wrap: break-word;
+  white-space: normal; /* Cambiado de pre-wrap a normal para evitar espacios fantasmas */
+  line-height: 1.5;
+  color: #e5e7eb;
+}
+
+/* IMPORTANTE: Esto asegura que la negrita se vea */
+.markdown-content strong {
+  font-weight: 800 !important; 
+  color: #fbbf24 !important;
+  display: inline;
+}
+
+.markdown-content .list-item, 
+.markdown-content .ordered-item {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  display: block;
+}
+
+.markdown-content br {
+  content: "";
+  display: block;
+  margin: 0.4rem 0;
 }

@@ -1,26 +1,23 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Checklist.css";
 import { AiOutlineLeft, AiOutlineDelete } from "react-icons/ai";
-
-/* ============================
-   🔌 BASE DE DATOS (COMENTADO)
-   ============================ */
-// import { useTasks } from "../../hooks/useTasks.js";
+import { useChecklist } from "../../hooks/useChecklist.js";
 
 const Checklist = () => {
-
-    /* ============================
-       🔌 BASE DE DATOS (COMENTADO)
-       ============================ */
-    // const { tasks, loading, error, addTask, toggleTask, deleteTask } = useTasks();
-
-    /* ============================
-       🧠 ESTADO LOCAL (FUNCIONAL)
-       ============================ */
-    const [tasks, setTasks] = useState([]);
+    const { tasks, loading, error, addTask, toggleTask, deleteTask } = useChecklist();
     const [openCheckedList, setOpenCheckedList] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const inputRef = useRef(null);
+
+    // Debug: Mostrar información en consola
+    useEffect(() => {
+        console.log('📋 Checklist State:', { 
+            tasksCount: tasks.length, 
+            loading, 
+            error,
+            tasks: tasks 
+        });
+    }, [tasks, loading, error]);
 
     // Enfocar input al renderizar
     useEffect(() => {
@@ -28,60 +25,72 @@ const Checklist = () => {
     }, [tasks.length]);
 
     /* ============================
-       ➕ AGREGAR TAREA (LOCAL)
+       ➕ AGREGAR TAREA
        ============================ */
-    const handleInputKeyDown = (e) => {
+    const handleInputKeyDown = async (e) => {
         if (e.key === "Tab" || e.key === "Enter") {
             e.preventDefault();
             const value = inputValue.trim();
 
             if (!value) return;
-            if (tasks.some(t => t.title === value)) return;
+            if (tasks.some(t => t.task_name === value)) return;
 
-            setTasks([
-                ...tasks,
-                {
-                    id: Date.now(),
-                    title: value,
-                    is_completed: false
-                }
-            ]);
-
-            setInputValue("");
+            try {
+                await addTask(value);
+                setInputValue("");
+            } catch (err) {
+                console.error('Error adding task:', err);
+            }
         }
     };
 
     /* ============================
-       ✅ TOGGLE TAREA (LOCAL)
+       ✅ TOGGLE TAREA
        ============================ */
-    const handleToggleTask = (taskId) => {
-        setTasks(tasks.map(task =>
-            task.id === taskId
-                ? { ...task, is_completed: !task.is_completed }
-                : task
-        ));
+    const handleToggleTask = async (taskId) => {
+        try {
+            await toggleTask(taskId);
+        } catch (err) {
+            console.error('Error toggling task:', err);
+        }
     };
 
     /* ============================
-       🗑️ BORRAR TAREA (LOCAL)
+       🗑️ BORRAR TAREA
        ============================ */
-    const handleDeleteTask = (taskId) => {
-        setTasks(tasks.filter(task => task.id !== taskId));
+    const handleDeleteTask = async (taskId) => {
+        try {
+            await deleteTask(taskId);
+        } catch (err) {
+            console.error('Error deleting task:', err);
+        }
     };
+
+    if (loading) {
+        return (
+            <div className="checklist-container">
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#e5e7eb' }}>
+                    Loading...
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="checklist-container">
+                <div className="checklist-header">
+                    <p className="title">Check-Lists</p>
+                </div>
+                <div style={{ textAlign: 'center', padding: '2rem', color: '#ef4444' }}>
+                    Error: {error}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="checklist-container">
-            {/*}
-            <div style={{
-                background: '#fbbf24',
-                color: '#222',
-                padding: '8px',
-                fontWeight: 'bold',
-                textAlign: 'center'
-            }}>
-                Checklist page is rendering!
-            </div>
-            */}
             <div className="checklist-header">
                 <p className="title">Check-Lists</p>
             </div>
@@ -91,17 +100,41 @@ const Checklist = () => {
                     <p className="title">Add your tasks</p>
                 </div>
 
+                {/* Debug info - remover en producción */}
+                {import.meta.env.DEV && (
+                    <div style={{ 
+                        padding: '0.5rem', 
+                        margin: '0.5rem 0', 
+                        background: '#1f2937', 
+                        borderRadius: '0.25rem',
+                        fontSize: '0.75rem',
+                        color: '#9ca3af'
+                    }}>
+                        {tasks.length} tareas totales | {tasks.filter(t => !t.completed).length} pendientes | {tasks.filter(t => t.completed).length} completadas
+                    </div>
+                )}
+
                 {/* ============================
                    📋 TAREAS NO COMPLETADAS
                    ============================ */}
-                {tasks.filter(task => !task.is_completed).map(task => (
+                {tasks.length === 0 && !loading && (
+                    <div style={{ 
+                        padding: '1rem', 
+                        textAlign: 'center', 
+                        color: '#9ca3af',
+                        fontSize: '0.875rem'
+                    }}>
+                        No hay tareas. Agrega una escribiendo y presionando Enter.
+                    </div>
+                )}
+                {tasks.filter(task => !task.completed).map(task => (
                     <div key={task.id} className="checkbox-container hoverable-task">
                         <input
                             type="checkbox"
-                            checked={false}
+                            checked={task.completed || false}
                             onChange={() => handleToggleTask(task.id)}
                         />
-                        <label>{task.title}</label>
+                        <label>{task.task_name}</label>
                         <button
                             className="delete-button"
                             onClick={() => handleDeleteTask(task.id)}
@@ -150,14 +183,14 @@ const Checklist = () => {
                     </div>
 
                     <div className={`checked-list-wrapper ${openCheckedList ? "open" : ""}`}>
-                        {tasks.filter(task => task.is_completed).map(task => (
+                        {tasks.filter(task => task.completed).map(task => (
                             <div key={task.id} className="checkbox-container hoverable-task fade-in">
                                 <input
                                     type="checkbox"
-                                    checked
+                                    checked={task.completed || true}
                                     onChange={() => handleToggleTask(task.id)}
                                 />
-                                <label className="completed">{task.title}</label>
+                                <label className="completed">{task.task_name}</label>
                                 <button
                                     className="delete-button"
                                     onClick={() => handleDeleteTask(task.id)}
