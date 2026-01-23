@@ -47,9 +47,7 @@ export const ReadHabit: React.FC = () => {
   const [records, setRecords] = useState<ReadRecord[]>([]);
   const [showStats, setShowStats] = useState(false);
 
-  console.log('ReadHabit component mounted');
-
-  // Calcular estadísticas
+  // Calculate statistics
   const calculateStats = () => {
     const totalDays = getDaysInMonth(currentMonth);
     const completedDays = records.filter(r => r.completed).length;
@@ -148,7 +146,7 @@ export const ReadHabit: React.FC = () => {
           <h1>Leer</h1>
         </div>
         <p className="read-description">
-          📖 Leo todos los días para expandir mi conocimiento. Cada página me abre nuevos mundos y posibilidades.
+          Estoy comprometido con la lectura diaria para expandir mi conocimiento y mejorar mis habilidades.
         </p>
       </div>
 
@@ -285,8 +283,8 @@ export const ReadHabit: React.FC = () => {
             <div className="stat-item">
               <span className="stat-label">Consistencia semanal</span>
               <span className="stat-value">
-                {stats.currentStreak >= 7 ? '🔥 ¡Excelente!' : 
-                 stats.currentStreak >= 3 ? '📖 ¡Bien!' : '🎯 Sigue adelante'}
+                {stats.currentStreak >= 7 ? 'Excelente rendimiento' : 
+                 stats.currentStreak >= 3 ? 'Buen progreso' : 'Continuar'}
               </span>
             </div>
           </div>
@@ -299,19 +297,19 @@ export const ReadHabit: React.FC = () => {
           {stats.currentStreak >= 7 ? (
             <>
               <FaFire className="motivation-icon fire" />
-              <h3>🔥 ¡Racha de Lectura Impresionante!</h3>
+              <h3>Racha de Lectura Impresionante</h3>
               <p>Llevas {stats.currentStreak} días seguidos leyendo. Tu dedicación está expandiendo tu conocimiento.</p>
             </>
           ) : stats.currentStreak >= 3 ? (
             <>
               <FaBookOpen className="motivation-icon" />
-              <h3>📖 ¡Vas Bien!</h3>
+              <h3>Buen Progreso</h3>
               <p>Llevas {stats.currentStreak} días seguidos. Sigue así, cada página te acerca a nuevas aventuras.</p>
             </>
           ) : (
             <>
               <FaChartLine className="motivation-icon" />
-              <h3>🎯 ¡Comienza Hoy!</h3>
+              <h3>Comienza Hoy</h3>
               <p>El primer paso es el más importante. ¡Lee hoy y empieza tu racha de conocimiento!</p>
             </>
           )}

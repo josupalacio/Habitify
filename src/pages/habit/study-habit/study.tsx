@@ -47,14 +47,13 @@ export const StudyHabit: React.FC = () => {
   const [records, setRecords] = useState<StudyRecord[]>([]);
   const [showStats, setShowStats] = useState(false);
 
-  console.log('StudyHabit component mounted');
-
-  // Calcular estadísticas
+  // Calculate statistics
   const calculateStats = () => {
     const totalDays = getDaysInMonth(currentMonth);
     const completedDays = records.filter(r => r.completed).length;
     const completionRate = totalDays > 0 ? (completedDays / totalDays) * 100 : 0;
     
+    // Calculate current streak
     // Calcular racha actual
     let currentStreak = 0;
     const today = new Date();
@@ -148,7 +147,7 @@ export const StudyHabit: React.FC = () => {
           <h1>Estudiar</h1>
         </div>
         <p className="study-description">
-          📚 Estudio todos los días para alcanzar mis metas. Cada hora de estudio me acerca a mis objetivos.
+          Estudio todos los días para alcanzar mis metas. Cada hora de estudio me acerca a mis objetivos.
         </p>
       </div>
 
@@ -285,8 +284,8 @@ export const StudyHabit: React.FC = () => {
             <div className="stat-item">
               <span className="stat-label">Consistencia semanal</span>
               <span className="stat-value">
-                {stats.currentStreak >= 7 ? '🔥 ¡Excelente!' : 
-                 stats.currentStreak >= 3 ? '📚 ¡Bien!' : '🎯 Sigue adelante'}
+                {stats.currentStreak >= 7 ? 'Excelente rendimiento' : 
+                 stats.currentStreak >= 3 ? 'Buen progreso' : 'Continuar'}
               </span>
             </div>
           </div>
@@ -299,19 +298,19 @@ export const StudyHabit: React.FC = () => {
           {stats.currentStreak >= 7 ? (
             <>
               <FaFire className="motivation-icon fire" />
-              <h3>🔥 ¡Racha de Estudio Impresionante!</h3>
+              <h3>Racha de Estudio Impresionante</h3>
               <p>Llevas {stats.currentStreak} días seguidos estudiando. Tu dedicación está dando resultados increíbles.</p>
             </>
           ) : stats.currentStreak >= 3 ? (
             <>
               <FaBook className="motivation-icon" />
-              <h3>📚 ¡Vas Bien!</h3>
+              <h3>Buen Progreso</h3>
               <p>Llevas {stats.currentStreak} días seguidos. Sigue así, cada día de estudio cuenta.</p>
             </>
           ) : (
             <>
               <FaChartLine className="motivation-icon" />
-              <h3>🎯 ¡Comienza Hoy!</h3>
+              <h3>Comienza Hoy</h3>
               <p>El primer paso es el más importante. ¡Estudia hoy y empieza tu racha de conocimiento!</p>
             </>
           )}

@@ -156,18 +156,19 @@ button:active {
   margin: 0.5rem 0 0 0.7rem;
 }
 
-/* Icono dentro del streak */
+/* Icon inside streak */
 .icons-emoji {
-  font-size: 1em; /* tamaño más grande solo para el fuego */
-  margin-left: 0.25rem; /* espacio entre número y emoji */
+  font-size: 1em;
+  margin-left: 0.25rem;
 }
 
 /* ------------------ Habits Tech Glow ------------------ */
 
-/* Estudiar - morado tech */
+/* Study - purple tech */
 .habits.estudiar .labels {
   background: linear-gradient(145deg, #b55fff, #9b59b6, #7d3c98);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 2px #fff, 0 0 4px #b55fff;
   font-weight: bold;
@@ -178,10 +179,11 @@ button:active {
   text-shadow: 0 0 3px #fff, 0 0 6px #b55fff;
 }
 
-/* Leer - azul tech */
+/* Read - blue tech */
 .habits.leer .labels {
   background: linear-gradient(145deg, #55f0ff, #1abcff, #1581d1);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 2px #fff, 0 0 4px #55f0ff;
   font-weight: bold;
@@ -192,10 +194,11 @@ button:active {
   text-shadow: 0 0 2px #fff, 0 0 4px #55f0ff;
 }
 
-/* Gym - verde tech */
+/* Gym - green tech */
 .habits.gym .labels {
   background: linear-gradient(145deg, #00ff7f, #2ecc71, #27ae60);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 2px #fff, 0 0 4px #00ff7f;
   font-weight: bold;
@@ -206,36 +209,18 @@ button:active {
   text-shadow: 0 0 2px #fff, 0 0 4px #00ff7f;
 }
 
-/* Estrellita que titila para todas */
-.habits .labels::after {
-  content: '✨';
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  font-size: 0.8em;
-  opacity: 0.5;
-  animation: twinkle 1.5s infinite;
-}
-@keyframes twinkle {
-  0%   { opacity: 0.2; transform: scale(0.9) rotate(0deg); }
-  25%  { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
-  50%  { opacity: 0.3; transform: scale(1) rotate(-5deg); }
-  75%  { opacity: 0.6; transform: scale(1.05) rotate(3deg); }
-  100% { opacity: 0.2; transform: scale(0.95) rotate(-2deg); }
-}
-
 .habits.estudiar .icons svg {
-  color: #9b59b6; /* morado tech */
+  color: #9b59b6;
   filter: drop-shadow(0 0 4px #b55fff);
 }
 
 .habits.leer .icons svg {
-  color: #1abcff; /* azul */
+  color: #1abcff;
   filter: drop-shadow(0 0 4px #55f0ff);
 }
 
 .habits.gym .icons svg {
-  color: #2ecc71; /* verde */
+  color: #2ecc71;
   filter: drop-shadow(0 0 4px #00ff7f);
 }
 
@@ -244,7 +229,7 @@ button:active {
   bottom: 5rem;
 }
 
-/* Efecto Glossy para hábitos dinámicos */
+/* Glossy effect for dynamic habits */
 .glossy-habit {
   position: relative;
   overflow: hidden;
@@ -308,7 +293,7 @@ button:active {
   text-shadow: 0 0 4px rgba(0,0,0,0.3);
 }
 
-/* Efecto glossy específico para hábitos fijos con sus colores */
+/* Glossy effect specific to fixed habits with their colors */
 .habits.estudiar.glossy-habit {
   background: linear-gradient(135deg, 
     rgba(181, 95, 255, 0.2) 0%, 
@@ -384,7 +369,7 @@ button:active {
   );
 }
 
-/* Estilos para hábitos personalizados con color dinámico */
+/* Styles for custom habits with dynamic color */
 .habits.custom-habit .labels {
   background: linear-gradient(145deg, var(--habit-color), color-mix(in srgb, var(--habit-color) 80%, black), color-mix(in srgb, var(--habit-color) 60%, black));
   -webkit-background-clip: text;
@@ -405,7 +390,7 @@ button:active {
   filter: drop-shadow(0 0 4px var(--habit-color));
 }
 
-/* Efecto surf brillante para hábitos personalizados */
+/* Surf glossy effect for custom habits */
 .habits.custom-habit {
   position: relative;
   overflow: hidden;
@@ -450,7 +435,7 @@ button:active {
   pointer-events: none;
 }
 
-/* Efecto glossy específico para hábitos personalizados con su color */
+/* Glossy effect specific to custom habits with their color */
 .habits.custom-habit.glossy-habit {
   background: linear-gradient(135deg, 
     color-mix(in srgb, var(--habit-color) 20%, transparent) 0%, 
@@ -485,7 +470,7 @@ button:active {
   }
 }
 
-/* Estilos para contenedor de hábitos con botón de eliminar */
+/* Styles for habit container with delete button */
 .habit-item-container {
   position: relative;
   display: flex;
@@ -517,16 +502,24 @@ button:active {
 
 .habit-item-container .habits {
   flex: 1;
-  padding-right: 40px; /* Espacio para el botón de eliminar */
+  padding-right: 40px; /* Space for delete button */
 }
 
-/* Estrellita que titila para hábitos personalizados */
-.habits.custom-habit .labels::after {
-  content: '✨';
+/* Twinkling star for all habits */
+.habits .labels::after {
+  content: '';
   position: absolute;
   top: -2px;
   right: -2px;
   font-size: 0.8em;
   opacity: 0.5;
   animation: twinkle 1.5s infinite;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.2; transform: scale(0.9) rotate(0deg); }
+  25%  { opacity: 0.7; transform: scale(1.1) rotate(5deg); }
+  50%  { opacity: 0.3; transform: scale(1) rotate(-5deg); }
+  75%  { opacity: 0.6; transform: scale(1.05) rotate(3deg); }
+  100% { opacity: 0.2; transform: scale(0.95) rotate(-2deg); }
 }

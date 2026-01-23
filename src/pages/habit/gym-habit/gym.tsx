@@ -54,9 +54,7 @@ export const GymHabit: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showStats, setShowStats] = useState(false);
 
-  console.log('GymHabit component mounted');
-
-  // Calcular estadísticas
+  // Calculate statistics
   const calculateStats = () => {
     const totalDays = getDaysInMonth(currentMonth);
     const completedDays = records.filter(r => r.completed).length;
@@ -156,7 +154,7 @@ export const GymHabit: React.FC = () => {
           <h1>Ir la gym</h1>
         </div>
         <p className="gym-description">
-          💪 Voy al gimnasio más seguido. Cada día que entreno me acerco a mi mejor versión.
+          Voy al gimnasio seguido. Cada día que entreno me acerco a mi mejor versión.
         </p>
       </div>
 
@@ -293,8 +291,8 @@ export const GymHabit: React.FC = () => {
             <div className="stat-item">
               <span className="stat-label">Consistencia semanal</span>
               <span className="stat-value">
-                {stats.currentStreak >= 7 ? '🔥 ¡Excelente!' : 
-                 stats.currentStreak >= 3 ? '💪 ¡Bien!' : '🎯 Sigue adelante'}
+                {stats.currentStreak >= 7 ? 'Excelente rendimiento' : 
+                 stats.currentStreak >= 3 ? 'Buen progreso' : 'Continuar'}
               </span>
             </div>
           </div>
@@ -307,19 +305,19 @@ export const GymHabit: React.FC = () => {
           {stats.currentStreak >= 7 ? (
             <>
               <FaFire className="motivation-icon fire" />
-              <h3>🔥 ¡Racha Impresionante!</h3>
+              <h3>Racha Impresionante</h3>
               <p>Llevas {stats.currentStreak} días seguidos en el gimnasio. Tu dedicación está dando resultados increíbles.</p>
             </>
           ) : stats.currentStreak >= 3 ? (
             <>
               <FaDumbbell className="motivation-icon" />
-              <h3>💪 ¡Vas Bien!</h3>
+              <h3>Buen Progreso</h3>
               <p>Llevas {stats.currentStreak} días seguidos. Sigue así, cada día cuenta.</p>
             </>
           ) : (
             <>
               <FaChartLine className="motivation-icon" />
-              <h3>🎯 ¡Comienza Hoy!</h3>
+              <h3>Comienza Hoy</h3>
               <p>El primer paso es el más importante. ¡Entrena hoy y empieza tu racha!</p>
             </>
           )}

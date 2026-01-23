@@ -57,7 +57,7 @@ const Login = () => {
                 <div className="auth-form-section">
                     <form className="auth-form" onSubmit={handleLogin}>
                         <div className="auth-header">
-                            <h1 className="auth-title">🎯 Habitify</h1>
+                            <h1 className="auth-title">Habitify</h1>
                             <h3 className="auth-subtitle">Inicia Sesión</h3>
                             <p className="auth-description">
                                 Conecta con tu cuenta para gestionar tus hábitos

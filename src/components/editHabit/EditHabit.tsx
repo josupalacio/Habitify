@@ -10,18 +10,18 @@ interface EditHabitProps {
 }
 
 const reactIcons = {
-  books: '📚',
-  read: '📖',
-  study: '🎓',
-  gym: '💪',
-  run: '🏃',
-  focus: '🧠',
-  done: '✅',
-  timer: '⏰',
-  calendar: '📅',
-  sleep: '😴',
-  water: '💧',
-  sun: '☀️',
+  books: 'books',
+  read: 'read',
+  study: 'study',
+  gym: 'gym',
+  run: 'run',
+  focus: 'focus',
+  done: 'done',
+  timer: 'timer',
+  calendar: 'calendar',
+  sleep: 'sleep',
+  water: 'water',
+  sun: 'sun',
 };
 
 const suggestedColors = [

@@ -99,7 +99,7 @@ export const DynamicHabit: React.FC = () => {
       name: decodedHabitName,
       color: '#4ecdc4',
       iconKey: 'books',
-      description: `🎯 Practico ${decodedHabitName} todos los días para mejorar. Cada día que lo practico me acerca a mis objetivos.`
+      description: `Practico ${decodedHabitName} todos los días para mejorar. Cada día que lo practico me acerca a mis objetivos.`
     };
   });
 
@@ -214,19 +214,19 @@ export const DynamicHabit: React.FC = () => {
     if (streak >= 7) {
       return {
         icon: <FaFire className="motivation-icon fire" />,
-        title: `🔥 ¡Racha de ${habitData.name} Impresionante!`,
+        title: `Racha de ${habitData.name} Impresionante`,
         text: `Llevas ${streak} días seguidos practicando ${habitData.name}. Tu dedicación está dando resultados increíbles.`
       };
     } else if (streak >= 3) {
       return {
         icon: habitIcon,
-        title: `💪 ¡Vas Bien con ${habitData.name}!`,
+        title: `Buen Progreso con ${habitData.name}`,
         text: `Llevas ${streak} días seguidos. Sigue así, cada día de ${habitData.name} cuenta.`
       };
     } else {
       return {
         icon: <FaChartLine className="motivation-icon" />,
-        title: `🎯 ¡Comienza Hoy con ${habitData.name}!`,
+        title: `Comienza Hoy con ${habitData.name}`,
         text: `El primer paso es el más importante. ¡Practica ${habitData.name} hoy y empieza tu racha!`
       };
     }

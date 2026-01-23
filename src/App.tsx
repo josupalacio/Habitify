@@ -16,30 +16,23 @@ import Login from "./pages/auth/Login";
 import { StudyHabit } from "./pages/habit/study-habit/study";
 import { GymHabit } from "./pages/habit/gym-habit/gym";
 import { ReadHabit } from "./pages/habit/read-habit/read";
-import { StudyHabitSimple } from "./pages/habit/study-habit/study-simple";
 
 const AppContent: React.FC = () => {
   const { isAuthenticated, loading } = useAuth();
-  
-  console.log('AppContent: loading =', loading, 'isAuthenticated =', isAuthenticated);
 
   if (loading) {
-    console.log('Mostrando pantalla de carga...');
     return (
       <div className="h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-900 to-slate-800">
         <div className="text-white text-center">
-          <p>Cargando Habitify...</p>
+          <p>Loading Habitify...</p>
         </div>
       </div>
     );
   }
 
   if (!isAuthenticated) {
-    console.log('Usuario no autenticado, mostrando Login...');
     return <Login />;
   }
-
-  console.log('Usuario autenticado, mostrando rutas...');
 
   return (
     <div className="h-screen w-full">
