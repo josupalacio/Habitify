@@ -157,24 +157,23 @@ export const SidebarWorking: React.FC = () => {
           </button>
 
           {/* HÁBITOS FIJOS */}
-          <button className="habits estudiar glossy-habit" onClick={() => navigate('/study-habit')}>
+          <button className="habits estudiar glossy-habit" onClick={() => navigate('/study')}>
             <li><span className="icons"><PiBooksDuotone /></span><span className="labels">Estudiar</span></li>
           </button>
-          <button className="habits gym glossy-habit" onClick={() => navigate('/gym-habit')}>
+          <button className="habits gym glossy-habit" onClick={() => navigate('/gym')}>
             <li><span className="icons"><GiWeightLiftingUp /></span><span className="labels">Ir al Gym</span></li>
           </button>
-          <button className="habits leer glossy-habit" onClick={() => navigate('/read-habit')}>
+          <button className="habits leer glossy-habit" onClick={() => navigate('/read')}>
             <li><span className="icons"><LiaBookSolid/></span><span className="labels">Leer</span></li>
           </button>
 
-          {/* Render hábitos locales (vacío por ahora) */}
-          {localHabits.length === 0 && null}
+          {/* Render hábitos locales con navegación dinámica */}
           {localHabits.map((habit) => (
             <button 
               key={habit.id}
               className="habits custom-habit glossy-habit"
               style={{ '--habit-color': habit.color } as React.CSSProperties}
-              onClick={() => navigate('/habit-demo')}
+              onClick={() => navigate(`/habit/${encodeURIComponent(habit.name)}`)}
             >
               <li>
                 <span className="icons">

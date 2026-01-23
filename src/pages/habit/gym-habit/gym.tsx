@@ -54,6 +54,8 @@ export const GymHabit: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showStats, setShowStats] = useState(false);
 
+  console.log('GymHabit component mounted');
+
   // Calcular estadísticas
   const calculateStats = () => {
     const totalDays = getDaysInMonth(currentMonth);

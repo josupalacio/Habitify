@@ -139,6 +139,54 @@
   padding: 0;
 }
 
+.icon-dropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 iconos por fila para cuadrícula perfecta */
+  grid-template-rows: auto;
+  gap: 10px;
+  padding: 12px;
+  z-index: 1100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  width: 200px;
+  /* Ancho fijo para 4 columnas */
+  max-height: 250px;
+  /* Altura máxima con scroll */
+  overflow-y: auto;
+}
+
+.icon-option {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+  background-color: #2a2a2a;
+  border: 2px solid transparent;
+  margin: 0;
+  /* Sin margin extra */
+}
+
+.icon-option:hover {
+  background-color: #4b5563;
+  transform: scale(1.1);
+}
+
+.icon-option.active {
+  background-color: #10b981;
+  border-color: #34d399;
+  transform: scale(1.1);
+}
 
 .color-circle {
   width: 25px;
@@ -189,60 +237,6 @@
   position: relative;
   display: flex;
   align-items: center;
-}
-
-.icon-picker {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.icon-picker:hover {
-  transform: scale(1.1);
-}
-
-/* El menú desplegable */
-.icon-dropdown {
-  position: absolute;
-  top: 110%;
-  /* Justo debajo del botón */
-  right: 0;
-  background-color: #374151;
-  /* Color gris oscuro acorde a tu modal */
-  border: 1px solid #4b5563;
-  border-radius: 8px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  /* 4 iconos por fila */
-  gap: 8px;
-  padding: 10px;
-  z-index: 1100;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.icon-option {
-  width: 35px;
-  height: 35px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.4rem;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.2s;
-}
-
-.icon-option:hover {
-  background-color: #4b5563;
-}
-
-.icon-option.active {
-  background-color: #10b981;
-  /* Verde esmeralda si está seleccionado */
 }
 
 /* Paleta de colores sugeridos */

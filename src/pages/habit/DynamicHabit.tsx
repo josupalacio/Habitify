@@ -1,12 +1,49 @@
 import React, { useState } from 'react';
-import { FaFire, FaCheckCircle, FaTimesCircle, FaBook, FaCalendarAlt, FaTrophy, FaChartLine } from 'react-icons/fa';
-import './study.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import { FaFire, FaCheckCircle, FaTimesCircle, FaCalendarAlt, FaTrophy, FaChartLine, FaBrain, FaRunning, FaDumbbell, FaBed, FaCalendarCheck } from 'react-icons/fa';
+import { PiBooksDuotone, PiNotebookDuotone } from 'react-icons/pi';
+import { LiaBookSolid } from 'react-icons/lia';
+import { GiWeightLiftingUp } from 'react-icons/gi';
+import { TbStretching, TbTargetArrow } from 'react-icons/tb';
+import { FaGlassWater } from 'react-icons/fa6';
+import { MdOutlineWbSunny, MdOutlineSchool, MdOutlineTimer } from 'react-icons/md';
+import { IoMdAddCircleOutline } from 'react-icons/io';
+import './DynamicHabit.css';
 
-interface StudyRecord {
+interface HabitRecord {
   date: Date;
   completed: boolean;
   notes?: string;
 }
+
+// Icon mapping dinámico - EXACTAMENTE IGUAL que CreateHabit
+const getIconForHabit = (iconKey: string) => {
+  const icons: { [key: string]: React.ReactNode } = {
+    books: <PiBooksDuotone key="books" />, 
+    read: <LiaBookSolid key="read" />, 
+    study: <MdOutlineSchool key="study" />, 
+    notebook: <PiNotebookDuotone key="notebook" />,
+    gym: <GiWeightLiftingUp key="gym" />, 
+    run: <FaRunning key="run" />, 
+    stretch: <TbStretching key="stretch" />,
+    focus: <FaBrain key="focus" />, 
+    goal: <TbTargetArrow key="goal" />, 
+    done: <FaCheckCircle key="done" />,
+    timer: <MdOutlineTimer key="timer" />, 
+    calendar: <FaCalendarCheck key="calendar" />,
+    sleep: <FaBed key="sleep" />, 
+    water: <FaGlassWater key="water" />, 
+    sun: <MdOutlineWbSunny key="sun" />,
+    add: <IoMdAddCircleOutline key="add" />,
+    default: <PiBooksDuotone key="default" />
+  };
+  return icons[iconKey] || icons.default;
+};
+
+// Color mapping dinámico
+const getColorForHabit = (color: string) => {
+  return color || '#4ecdc4';
+};
 
 // Funciones de fecha simplificadas sin date-fns
 const getMonthName = (date: Date) => {
@@ -42,12 +79,41 @@ const formatDate = (date: Date, format: string) => {
   return date.toLocaleDateString();
 };
 
-export const StudyHabit: React.FC = () => {
+export const DynamicHabit: React.FC = () => {
+  const { habitName } = useParams<{ habitName: string }>();
+  const navigate = useNavigate();
+  
+  // Debug para ver qué llega
+  console.log('DynamicHabit - habitName desde URL:', habitName);
+  
+  // Obtener datos del hábito desde localStorage
+  const [habitData, setHabitData] = useState<any>(() => {
+    // Decodificar el nombre del hábito desde la URL
+    const decodedHabitName = habitName ? decodeURIComponent(habitName) : 'Hábito';
+    console.log('DynamicHabit - decodedHabitName:', decodedHabitName);
+    
+    const stored = localStorage.getItem(`habit_${decodedHabitName}`);
+    console.log('DynamicHabit - stored data:', stored);
+    
+    return stored ? JSON.parse(stored) : {
+      name: decodedHabitName,
+      color: '#4ecdc4',
+      iconKey: 'books',
+      description: `🎯 Practico ${decodedHabitName} todos los días para mejorar. Cada día que lo practico me acerca a mis objetivos.`
+    };
+  });
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [records, setRecords] = useState<StudyRecord[]>([]);
+  const [records, setRecords] = useState<HabitRecord[]>([]);
   const [showStats, setShowStats] = useState(false);
 
-  console.log('StudyHabit component mounted');
+  // Guardar datos del hábito cuando cambien
+  React.useEffect(() => {
+    if (habitName) {
+      const decodedHabitName = decodeURIComponent(habitName);
+      localStorage.setItem(`habit_${decodedHabitName}`, JSON.stringify(habitData));
+    }
+  }, [habitData, habitName]);
 
   // Calcular estadísticas
   const calculateStats = () => {
@@ -138,17 +204,48 @@ export const StudyHabit: React.FC = () => {
   };
 
   const today = new Date();
+  const habitColor = getColorForHabit(habitData.color);
+  const habitIcon = getIconForHabit(habitData.iconKey);
+
+  // Mensajes motivacionales dinámicos
+  const getMotivationalMessage = (streak: number) => {
+    const habitNameLower = (habitData.name || '').toLowerCase();
+    
+    if (streak >= 7) {
+      return {
+        icon: <FaFire className="motivation-icon fire" />,
+        title: `🔥 ¡Racha de ${habitData.name} Impresionante!`,
+        text: `Llevas ${streak} días seguidos practicando ${habitData.name}. Tu dedicación está dando resultados increíbles.`
+      };
+    } else if (streak >= 3) {
+      return {
+        icon: habitIcon,
+        title: `💪 ¡Vas Bien con ${habitData.name}!`,
+        text: `Llevas ${streak} días seguidos. Sigue así, cada día de ${habitData.name} cuenta.`
+      };
+    } else {
+      return {
+        icon: <FaChartLine className="motivation-icon" />,
+        title: `🎯 ¡Comienza Hoy con ${habitData.name}!`,
+        text: `El primer paso es el más importante. ¡Practica ${habitData.name} hoy y empieza tu racha!`
+      };
+    }
+  };
+
+  const motivationalMessage = getMotivationalMessage(stats.currentStreak);
 
   return (
-    <div className="study-habit-container">
+    <div className="dynamic-habit-container" style={{ '--habit-color': habitColor } as React.CSSProperties}>
       {/* Header */}
-      <div className="study-header">
-        <div className="study-title">
-          <FaBook className="study-icon" />
-          <h1>Estudiar</h1>
+      <div className="habit-header">
+        <div className="habit-title">
+          <div className="habit-icon-wrapper" style={{ color: habitColor }}>
+            {habitIcon}
+          </div>
+          <h1>{habitData.name || 'Hábito'}</h1>
         </div>
-        <p className="study-description">
-          📚 Estudio todos los días para alcanzar mis metas. Cada hora de estudio me acerca a mis objetivos.
+        <p className="habit-description">
+          {habitData.description}
         </p>
       </div>
 
@@ -202,7 +299,7 @@ export const StudyHabit: React.FC = () => {
           onClick={() => toggleDayCompletion(today)}
         >
           <FaCheckCircle />
-          {getDayStatus(today) === 'completed' ? '¡Hoy ya estudié!' : 'Estudié hoy'}
+          {getDayStatus(today) === 'completed' ? `¡Hoy ya ${habitData.name.toLowerCase()}!` : `${habitData.name} hoy`}
         </button>
 
         <button 
@@ -259,84 +356,12 @@ export const StudyHabit: React.FC = () => {
         </div>
       </div>
 
-      {/* Extended Stats */}
-      {showStats && (
-        <div className="extended-stats">
-          <h3><FaChartLine /> Estadísticas Detalladas</h3>
-          <div className="stats-grid">
-            <div className="stat-item">
-              <span className="stat-label">Progreso mensual</span>
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
-                  style={{ width: `${stats.completionRate}%` }}
-                ></div>
-              </div>
-              <span className="stat-value">{stats.completionRate.toFixed(1)}%</span>
-            </div>
-            
-            <div className="stat-item">
-              <span className="stat-label">Días restantes este mes</span>
-              <span className="stat-value">
-                {stats.totalDays - stats.completedDays} días
-              </span>
-            </div>
-            
-            <div className="stat-item">
-              <span className="stat-label">Consistencia semanal</span>
-              <span className="stat-value">
-                {stats.currentStreak >= 7 ? '🔥 ¡Excelente!' : 
-                 stats.currentStreak >= 3 ? '📚 ¡Bien!' : '🎯 Sigue adelante'}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Motivational Message */}
       <div className="motivation-section">
         <div className="motivation-card">
-          {stats.currentStreak >= 7 ? (
-            <>
-              <FaFire className="motivation-icon fire" />
-              <h3>🔥 ¡Racha de Estudio Impresionante!</h3>
-              <p>Llevas {stats.currentStreak} días seguidos estudiando. Tu dedicación está dando resultados increíbles.</p>
-            </>
-          ) : stats.currentStreak >= 3 ? (
-            <>
-              <FaBook className="motivation-icon" />
-              <h3>📚 ¡Vas Bien!</h3>
-              <p>Llevas {stats.currentStreak} días seguidos. Sigue así, cada día de estudio cuenta.</p>
-            </>
-          ) : (
-            <>
-              <FaChartLine className="motivation-icon" />
-              <h3>🎯 ¡Comienza Hoy!</h3>
-              <p>El primer paso es el más importante. ¡Estudia hoy y empieza tu racha de conocimiento!</p>
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="recent-activity">
-        <h3><FaCalendarAlt /> Actividad Reciente</h3>
-        <div className="activity-list">
-          {records
-            .filter(r => r.completed)
-            .sort((a, b) => b.date.getTime() - a.date.getTime())
-            .slice(0, 5)
-            .map((record, index) => (
-              <div key={index} className="activity-item">
-                <FaCheckCircle className="activity-icon" />
-                <span className="activity-text">
-                  Estudiaste el {formatDate(record.date, "d 'de' MMMM")}
-                </span>
-              </div>
-            ))}
-          {records.filter(r => r.completed).length === 0 && (
-            <p className="no-activity">Aún no hay sesiones de estudio registradas. ¡Comienza hoy!</p>
-          )}
+          {motivationalMessage.icon}
+          <h3>{motivationalMessage.title}</h3>
+          <p>{motivationalMessage.text}</p>
         </div>
       </div>
     </div>

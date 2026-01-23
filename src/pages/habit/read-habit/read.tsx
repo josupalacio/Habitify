@@ -47,6 +47,8 @@ export const ReadHabit: React.FC = () => {
   const [records, setRecords] = useState<ReadRecord[]>([]);
   const [showStats, setShowStats] = useState(false);
 
+  console.log('ReadHabit component mounted');
+
   // Calcular estadísticas
   const calculateStats = () => {
     const totalDays = getDaysInMonth(currentMonth);

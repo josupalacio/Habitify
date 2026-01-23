@@ -36,7 +36,15 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onCreateHabit: (name: string, color: string, isGlossy: boolean, description: string, frequency: string, time: string, iconKey: string) => void;
+  onCreateHabit: (habitData: {
+    name: string;
+    color: string;
+    isGlossy: boolean;
+    description: string;
+    frequency: string;
+    time: string;
+    iconKey: string;
+  }) => void;
 };
 
 const CreateHabit: React.FC<Props> = ({ isOpen, onClose, onCreateHabit }) => {
@@ -49,14 +57,25 @@ const CreateHabit: React.FC<Props> = ({ isOpen, onClose, onCreateHabit }) => {
   const [frequency, setFrequency] = useState("Daily");
   const [time, setTime] = useState("All day");
   const [showIconList, setShowIconList] = useState(false);
-  const [selectedIconKey, setSelectedIconKey] = useState("add");
+  const [selectedIconKey, setSelectedIconKey] = useState("books");
 
+  // Icon mapping SIN keys para evitar conflictos de React
   const reactIcons: Record<string, React.ReactNode> = {
-    books: <PiBooksDuotone />, read: <LiaBookSolid />, study: <MdOutlineSchool />, notebook: <PiNotebookDuotone />,
-    gym: <GiWeightLiftingUp />, run: <FaRunning />, stretch: <TbStretching />,
-    focus: <FaBrain />, goal: <TbTargetArrow />, done: <FaCheckCircle />,
-    timer: <MdOutlineTimer />, calendar: <FaCalendarCheck />,
-    sleep: <FaBed />, water: <FaGlassWater />, sun: <MdOutlineWbSunny />,
+    books: <PiBooksDuotone />, 
+    read: <LiaBookSolid />, 
+    study: <MdOutlineSchool />, 
+    notebook: <PiNotebookDuotone />,
+    gym: <GiWeightLiftingUp />, 
+    run: <FaRunning />, 
+    stretch: <TbStretching />,
+    focus: <FaBrain />, 
+    goal: <TbTargetArrow />, 
+    done: <FaCheckCircle />,
+    timer: <MdOutlineTimer />, 
+    calendar: <FaCalendarCheck />,
+    sleep: <FaBed />, 
+    water: <FaGlassWater />, 
+    sun: <MdOutlineWbSunny />,
     add: <IoMdAddCircleOutline />,
   };
 
@@ -82,8 +101,18 @@ const CreateHabit: React.FC<Props> = ({ isOpen, onClose, onCreateHabit }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    onCreateHabit(name, color, isGlossy, description, frequency, time, selectedIconKey);
-    setName(""); setDescription(""); setSelectedIconKey("add"); setShowIconList(false);
+    console.log('Creando hábito con iconKey:', selectedIconKey); // Debug
+    console.log('Icono final:', reactIcons[selectedIconKey]); // Debug del icono real
+    onCreateHabit({ 
+      name, 
+      color, 
+      isGlossy, 
+      description, 
+      frequency, 
+      time, 
+      iconKey: selectedIconKey 
+    });
+    setName(""); setDescription(""); setSelectedIconKey("books"); setShowIconList(false);
     onClose();
   };
 
@@ -109,7 +138,15 @@ const CreateHabit: React.FC<Props> = ({ isOpen, onClose, onCreateHabit }) => {
               {showIconList && (
                 <div className="icon-dropdown">
                   {Object.entries(reactIcons).map(([key, icon]) => (
-                    <div key={key} className={`icon-option ${selectedIconKey === key ? 'active' : ''}`} onClick={() => { setSelectedIconKey(key); setShowIconList(false); }}>
+                    <div 
+                      key={key} // Key simple sin forceUpdate
+                      className={`icon-option ${selectedIconKey === key ? 'active' : ''}`} 
+                      onClick={() => { 
+                        console.log('Icono seleccionado:', key); // Debug simple
+                        setSelectedIconKey(key); 
+                        setShowIconList(false); 
+                      }}
+                    >
                       {icon}
                     </div>
                   ))}
